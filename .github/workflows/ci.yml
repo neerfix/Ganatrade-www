@@ -29,12 +29,5 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
 
-      - name: Stop the server
-        run: ssh staging 'sudo systemctl stop api_ganatrade.service'
-
       - name: Check out the source
         run: ssh staging 'cd /var/www/ganatrade/www/ && git fetch && git reset --hard origin/master && make install'
-
-      - name: Start the server
-        if: ${{ always() }}
-        run: ssh staging 'sudo systemctl start api_ganatrade.service'
