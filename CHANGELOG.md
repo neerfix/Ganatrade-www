@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/Ganatrade/www/compare/v0.1.3...v0.1.4) (2020-11-22)
+
+
+### Bug Fixes
+
+* script to auto-deploy ([40466d0](https://github.com/Ganatrade/www/commit/40466d0ccf312fe56a36bbc619947cd9c4142daa))
+
 ### [0.1.3](https://github.com/Ganatrade/www/compare/v0.1.2...v0.1.3) (2020-11-07)
 
 
