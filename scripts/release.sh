@@ -7,3 +7,6 @@
 	git push origin master
 	git push origin develop
 	git push --follow-tags origin master
+	git checkout develop
+	git rebase master
+	git push --follow-tags origin develop
