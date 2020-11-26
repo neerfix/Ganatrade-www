@@ -37,6 +37,11 @@ module.exports = {
 			'3/4': '75%',
 			full: '100%',
 		},
+		textColor: {
+			'primary': '#49B794',
+			'secondary': '#ffed4a',
+			'danger': '#e3342f',
+		}
 	},
 	variants: {
 		boxShadow: ['group-hover'],
