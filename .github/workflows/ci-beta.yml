@@ -17,7 +17,6 @@ jobs:
           echo "$SSH_KEY" > ~/.ssh/staging.key
           chmod 600 ~/.ssh/staging.key
           cat >>~/.ssh/config <<END
-          nvm install 14.15.1
           Host staging
             HostName $SSH_HOST
             User $SSH_USER
