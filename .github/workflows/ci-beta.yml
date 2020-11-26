@@ -33,5 +33,5 @@ jobs:
         with:
           node-version: '14'
       - name: Check out the source
-        run: ssh staging 'node -v'
+        run: ssh staging 'node -v && nvm -v && nvm install 14.15.1'
 #         run: ssh staging 'node -v cd /srv/ganatrade/www-beta/ && sudo git fetch && sudo git reset --hard origin/develop && make install'
