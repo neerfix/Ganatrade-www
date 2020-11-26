@@ -7,7 +7,6 @@ on:
       - '**.md'
 jobs:
   deploy:
-    name: "Deploy BETA to VPS"
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     # needs: test
@@ -28,6 +27,11 @@ jobs:
           SSH_USER: ${{ secrets.USERNAME }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
+          
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15.1'
 
       - name: Check out the source
         run: ssh staging 'cd /srv/ganatrade/www-beta/ && sudo git fetch && sudo git reset --hard origin/develop && make install'
