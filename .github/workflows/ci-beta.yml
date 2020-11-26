@@ -28,10 +28,6 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
 
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
       - name: Check out the source
-        run: ssh staging 'node -v && nvm -v && nvm install 14.15.1'
+        run: ssh staging 'node -v && pwd && ip a s'
 #         run: ssh staging 'node -v cd /srv/ganatrade/www-beta/ && sudo git fetch && sudo git reset --hard origin/develop && make install'
