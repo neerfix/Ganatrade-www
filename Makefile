@@ -1,8 +1,8 @@
 # Script to install prod
 install:
+	./scripts/install-node-ci.sh
 	yarn
 	yarn build
-	./scripts/install-node-ci.sh
 
 # from develop to master
 release:
