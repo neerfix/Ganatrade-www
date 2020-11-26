@@ -1,4 +1,4 @@
-name: SSH
+name: Deploy Beta
 on:
   push:
     branches:
