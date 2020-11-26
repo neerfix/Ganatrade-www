@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { LogIn, Info, UserAdd } from 'css.gg'
-
 import Logo from '../logo-header.png'
 
 function Navbar() {
@@ -60,15 +58,15 @@ function Navbar() {
 							</div>*/}
 							<div className="relative flex items-center">
 								<a href="/login" className="px-3 py-2 text-sm font-medium text-black flex items-center">
-									<LogIn />
+									<i className="gg-log-in"></i>
 									<span className="ml-4">Connexion</span>
 								</a>
 								<a href="/register" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
-									<UserAdd />
+									<i className="gg-user-add"></i>
 									<span className="ml-2">Inscription</span>
 								</a>
 								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
-									<Info />
+									<i className="gg-info"></i>
 									<span className="ml-2">Guide</span>
 								</a>
 							</div>
