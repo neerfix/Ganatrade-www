@@ -31,8 +31,8 @@ jobs:
       - name: Check out the source
         run: |
           ssh staging 'node -v 
-            && npm -v 
-            && cd /srv/ganatrade/www-beta/ 
-            && sudo git fetch 
-            && sudo git reset --hard origin/develop 
-            && make install'
+          npm -v 
+          cd /srv/ganatrade/www-beta/ 
+          sudo git fetch 
+          sudo git reset --hard origin/develop 
+          make install'
