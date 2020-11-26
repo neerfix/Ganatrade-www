@@ -35,4 +35,4 @@ jobs:
           SSH_HOST: ${{ secrets.HOST }}
 
       - name: Check out the source
-        run: ssh staging 'node -v cd /srv/ganatrade/www-beta/ && sudo git fetch && sudo git reset --hard origin/develop && make install'
+        run: ssh staging 'node -v && npm -v && cd /srv/ganatrade/www-beta/ && sudo git fetch && sudo git reset --hard origin/develop && make install'
