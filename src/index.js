@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import './assets/main.css';
 // Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
+// Base CSS
+import './index.css'
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
