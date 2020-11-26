@@ -1,6 +1,6 @@
 # Script to install prod
 install:
-	yarn && yarn build
+	nvm use 14.15.1 && yarn && yarn build
 
 # from develop to master
 release:
