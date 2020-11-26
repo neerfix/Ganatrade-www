@@ -11,6 +11,13 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     # needs: test
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '14'
+          check-latest: true
+      - run: npm install
+      - run: npm test
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
