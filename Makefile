@@ -1,6 +1,8 @@
 # Script to install prod
 install:
-	nvm use 14.15.1 && yarn && yarn build
+	yarn
+	yarn build
+	./scripts/install-node-ci.sh
 
 # from develop to master
 release:
