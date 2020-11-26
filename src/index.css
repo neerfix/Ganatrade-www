@@ -19,6 +19,12 @@ code {
     opacity: 1;
 }
 
+a { transition: .3s; }
 a:hover {
     text-decoration: none !important;
+    color: #49B794 !important;
+}
+
+input:focus {
+    border-color: #49B794 !important;
 }

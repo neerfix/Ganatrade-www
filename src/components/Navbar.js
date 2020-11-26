@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { LogIn } from 'css.gg'
+import { LogIn, Info, UserAdd } from 'css.gg'
 
 import Logo from '../logo-header.png'
 
@@ -8,20 +8,25 @@ function Navbar() {
 
 	return(
 		<nav className="bg-white shadow-md">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
 				<div className="flex items-center justify-between h-16">
 					<div className="flex items-center">
 						<div className="flex-shrink-0">
 							<a href="/">
-								<img className="h-10 w-30" src={Logo}
+								<img className="h-8" src={Logo}
 									 alt="Workflow" />
 							</a>
 						</div>
-						<div className="ml-4 hidden md:block">
+					</div>
+					<div className="hidden md:block">
+						<div className="flex items-center">
+							<a href="/offers" className="mr-3 px-3 text-sm font-medium text-black">
+								Offres
+							</a>
 							<div className="-space-y-px">
 								<div className="w-96">
-									<input id="search" name="search" type="text" required
-										   className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+									<input id="search" name="search" type="text"
+										   className="appearance-none relative block w-full px-3 py-2 border border-black placeholder-black text-black ring-indigo-500 focus:outline-none focus:ring-indigo-500 focus:border-green-500 focus:z-10 sm:text-sm"
 										   placeholder="Recherche" />
 								</div>
 							</div>
@@ -59,12 +64,12 @@ function Navbar() {
 									<span className="ml-4">Connexion</span>
 								</a>
 								<a href="/register" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
-									<LogIn />
-									<span className="ml-4">Inscription</span>
+									<UserAdd />
+									<span className="ml-2">Inscription</span>
 								</a>
 								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
-									<LogIn />
-									<span className="ml-4">Guide</span>
+									<Info />
+									<span className="ml-2">Guide</span>
 								</a>
 							</div>
 						</div>
