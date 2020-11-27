@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 
 // TailwindCSS
 import './assets/main.css';
-// Bootstrap CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
 // Base CSS
 import './index.css'
 
