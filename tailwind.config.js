@@ -1,16 +1,3 @@
-function getColorsVar(prefix, ...name) {
-	return name.reduce((colors, curr) => {
-		const varName = prefix ? `${prefix}${curr}` : curr;
-		colors[curr] = `var(--${varName})`;
-
-		return colors;
-	}, {});
-}
-
-const base = getColorsVar(null, 'primary', 'secondary', 'danger', 'green', 'warning');
-const backgroundColor = getColorsVar('bg-', 'dark', 'default', 'light', 'lighter', 'input', 'input-dark', 'card');
-const textColor = getColorsVar('text-', 'default', 'light', 'lighter');
-
 module.exports = {
 	corePlugins: {
 		container: false,
@@ -23,11 +10,6 @@ module.exports = {
 			lg: '0.9375rem',
 			full: '9999px',
 		},
-		extend: {
-			colors: base,
-			backgroundColor,
-			textColor,
-		},
 		minWidth: {
 			0: '0',
 			'1/4': '25%',
@@ -38,9 +20,23 @@ module.exports = {
 			full: '100%',
 		},
 		textColor: {
+			'black': '#000000',
 			'primary': '#49B794',
-			'secondary': '#ffed4a',
-			'danger': '#e3342f',
+			'secondary': '#219AAA',
+			'gray': '#6b7280',
+			'white': '#FFFFFF',
+		},
+		backgroundColor: {
+			'transparent': 'transparent',
+			'black': '#000000',
+			'white': '#FFFFFF',
+			'gray': '#6b7280',
+			'primary': '#49B794',
+			'primary-dark': '#41a485',
+			'primary-light': '#c8e9df',
+			'secondary': '#219AAA',
+			'secondary-dark': '#1d8795',
+			'secondary-light': '#bfecf2',
 		}
 	},
 	variants: {

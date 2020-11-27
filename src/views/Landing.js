@@ -1,5 +1,4 @@
-import React from 'react';
-import './Landing.scss';
+import React from 'react'
 
 function Landing(props) {
 
