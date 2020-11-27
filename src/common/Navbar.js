@@ -1,6 +1,7 @@
 import React from 'react'
+import './Navbar.scss';
 
-import Logo from '../logo-header.png'
+import Logo from '../assets/img/logo.png'
 
 function Navbar() {
 
@@ -19,7 +20,7 @@ function Navbar() {
 					<div className="hidden md:block">
 						<div className="flex items-center">
 							<a href="/offers" className="mr-3 px-3 text-sm font-medium text-black">
-								Offres
+								OFFRES
 							</a>
 							<div className="-space-y-px">
 								<div className="w-96">
@@ -57,17 +58,13 @@ function Navbar() {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								<a href="/login" className="px-3 py-2 text-sm font-medium text-black flex items-center">
+								<a href="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
 									<i className="gg-log-in"></i>
-									<span className="ml-4">Connexion</span>
-								</a>
-								<a href="/register" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
-									<i className="gg-user-add"></i>
-									<span className="ml-2">Inscription</span>
+									<span className="ml-4">CONNEXION / INSCRIPTION</span>
 								</a>
 								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
 									<i className="gg-info"></i>
-									<span className="ml-2">Guide</span>
+									<span className="ml-2">GUIDE</span>
 								</a>
 							</div>
 						</div>
