@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom';
 
 // TailwindCSS
 import './assets/main.css';
-// Bootstrap CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-// Base CSS
-import './index.css'
+
+// Custom CSS
+import './assets/global.scss';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
