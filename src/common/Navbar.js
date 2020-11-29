@@ -19,7 +19,7 @@ function Navbar() {
 					</div>
 					<div className="hidden md:block">
 						<div className="flex items-center">
-							<a href="/offers" className="mr-3 px-3 text-sm font-medium text-black">
+							<a href="/offers" className="mr-3 px-3 text-sm roboto-bold text-black">
 								OFFRES
 							</a>
 							<div className="-space-y-px">
@@ -58,11 +58,11 @@ function Navbar() {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								<a href="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
+								<a href="/sign" className="px-3 py-2 text-sm roboto-bold text-black flex items-center">
 									<i className="gg-log-in"></i>
 									<span className="ml-4">CONNEXION / INSCRIPTION</span>
 								</a>
-								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
+								<a href="/guide" className="ml-3 px-3 py-2 text-sm roboto-bold text-black flex items-center">
 									<i className="gg-info"></i>
 									<span className="ml-2">GUIDE</span>
 								</a>
