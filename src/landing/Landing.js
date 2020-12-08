@@ -11,7 +11,7 @@ function Landing(props) {
 		<div id="landing">
 			<main className="mt-32 mb-24 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-16 lg:px-8 xl:mt-36">
 				<div className="sm:text-center lg:text-left">
-					<h1 className="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-5xl lg:text-7xl max-w-7xl">
+					<h1 className="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-5xl lg:text-7xl max-w-6xl">
 						<span className="block xl:inline">Échanger ses objets c'est</span>
 						<span className="block text-primary xl:inline"> économique et écologique</span>
 					</h1>
@@ -49,8 +49,8 @@ function Landing(props) {
 										Simplicité
 									</dt>
 									<dd className="mt-2 font-medium text-gray">
-										Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit
-										perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.
+										Parcourez les diverses annonces, déposez les votres et
+										échangez avec les autres utilisateurs simplement sur notre plateforme.
 									</dd>
 								</div>
 							</div>
@@ -121,8 +121,8 @@ function Landing(props) {
 					</h2>
 					<div className="mt-8 lex lg:mt-0 lg:flex-shrink-0">
 						<div className="inline-flex rounded-md shadow">
-							<a onClick={() => goToRoute('/sign')}
-							   className="w-full flex items-center justify-center px-5 py-3 border border-transparent cursor-pointer font-medium rounded-md text-black bg-white hover:text-primary">
+							<a href="/sign"
+							   className="w-full flex items-center justify-center px-5 py-3 cursor-pointer font-medium rounded-md text-black bg-white hover:text-primary">
 								Inscription
 							</a>
 						</div>
