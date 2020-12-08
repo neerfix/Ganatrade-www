@@ -49,7 +49,7 @@ function Landing(props) {
 										Simplicité
 									</dt>
 									<dd className="mt-2 font-medium text-gray">
-										Parcourez les diverses annonces, déposez les votres et
+                    Parcourez les diverses annonces, déposez les votres et
 										échangez avec les autres utilisateurs simplement sur notre plateforme.
 									</dd>
 								</div>
