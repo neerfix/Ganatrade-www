@@ -36,6 +36,7 @@ module.exports = {
 			'gray': '#6b7280',
 			'gray-light': '#f5f6f9',
 			'gray-light-2': '#d5d8dc',
+			'gray-light-3': '#f1f2f3',
 			'primary': '#49B794',
 			'primary-dark': '#41a485',
 			'primary-light': '#c8e9df',
@@ -48,8 +49,8 @@ module.exports = {
 			'red-dark': '#801919',
 		},
 		borderColor: {
-			primary: '#49B794',
-			secondary: '#219AAA'
+			'primary': '#49B794',
+			'secondary': '#219AAA'
 		},
 		},
 		ringColor: {

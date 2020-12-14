@@ -21,7 +21,7 @@ function App() {
 	let history = useHistory();
 
 	return (
-		<div>
+		<div className="bg-gray-light-3">
 			<Navbar />
 			<Router history={history}>
 				<ScrollToTop />
