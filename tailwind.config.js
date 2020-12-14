@@ -48,10 +48,6 @@ module.exports = {
 			'red': '#aa2121',
 			'red-dark': '#801919',
 		},
-		borderColor: {
-			'primary': '#49B794',
-			'secondary': '#219AAA'
-		},
 		ringColor: {
 			'primary': '#49B794',
 			'secondary': '#219AAA',
