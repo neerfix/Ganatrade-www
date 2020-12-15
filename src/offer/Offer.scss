@@ -1,0 +1,26 @@
+#offer{
+    
+    #offerInfo{
+        position: relative;
+
+        #offerTitle{
+            position: absolute;
+            top: -1.25rem;
+        }
+    }
+
+    #offerUser{
+
+        .userAvatar{
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+    }
+
+}
