@@ -1,13 +1,26 @@
 import React, {useState} from 'react';
-import bcryptjs from 'bcryptjs'
+import { connect } from 'react-redux'
 import './Sign.scss';
 
-const salt = bcryptjs.genSaltSync(10);
+import { useHistory } from "react-router-dom";
 
+import { signActions } from "../redux/_actions/sign.actions";
+
+import { firebaseConfig } from '../config/firebase.config'
+import firebase from "firebase";
+
+// import bcryptjs from 'bcryptjs'
+// const salt = bcryptjs.genSaltSync(10);
 // 8 caractères, 1 majuscule, 1 chiffre
 const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
 
-function Sign() {
+if (!firebase.apps.length) {
+	firebase.initializeApp(firebaseConfig);
+}
+
+function Sign(props) {
+
+	let history = useHistory();
 
 	const [fields, setFields] = useState({})
 	const [errorMessage, setErrorMessage] = useState({})
@@ -27,19 +40,17 @@ function Sign() {
 			const newUser = {
 				username: fields.username,
 				email: fields.emailRegister,
-				password: bcryptjs.hashSync(fields.passwordRegister, salt),
+				// password: bcryptjs.hashSync(fields.passwordRegister, salt),
 				birthdate: fields.birthdate
 			}
 			console.log(newUser)
 		}
 	}
 
-	const login = (e) => {
+	const login = async (e) => {
 		e.preventDefault();
-		const user = {
-			email: fields.emailLogin,
-			password: bcryptjs.hashSync(fields.passwordLogin, salt),
-		}
+		const { dispatch } = props
+		await dispatch(signActions.login(fields.emailLogin, fields.passwordLogin))
 	}
 
 	const validator = (password, confirm) => {
@@ -62,7 +73,7 @@ function Sign() {
 
 	return(
 		<div id="sign">
-			<div className="h-screen-remaining bg-gray-light py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+			<div className="h-screen-remaining py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
 				<div id="register" className="flex-1 flex justify-center">
 					<div className="max-w-lg w-full space-y-8">
 						<div>
@@ -261,4 +272,12 @@ function Sign() {
 	)
 }
 
-export { Sign }
+function mapStateToProps(state) {
+	const { sign } = state
+	return {
+		sign
+	};
+}
+
+const connectedSignPage = connect(mapStateToProps)(Sign);
+export { connectedSignPage as Sign };

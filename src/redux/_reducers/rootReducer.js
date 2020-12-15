@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
-import { SignReducer } from './sign.reducer'
+import { sign } from './sign.reducer'
 
 const rootReducer = combineReducers({
-	SignReducer
+	sign
 })
 
 export default rootReducer

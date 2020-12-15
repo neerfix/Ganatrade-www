@@ -7,12 +7,24 @@ import './assets/main.css';
 // Custom CSS
 import './assets/global.scss';
 
+// App
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Store
+import { store } from "./redux/store/store";
+import { saveState } from "./redux/store/save";
+import { Provider } from "react-redux";
+
+store.subscribe(() => {
+    saveState(store.getState());
+})
+
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+            <App />
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );

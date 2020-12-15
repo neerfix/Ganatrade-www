@@ -1,38 +1,32 @@
 import SIGN from '../_constants/sign.constants';
 
-const initialState = { login: false, register: false, error: false };
+let user = JSON.parse(localStorage.getItem('user'));
+let token = JSON.parse(localStorage.getItem('token'));
+const initialState = user ? { loggedIn: true, error: false, user, token } : {};
 
-export const SignReducer = (sign = initialState, action = {}) =>{
+console.log(user, token)
+
+export const sign = (state = initialState, action) => {
 	switch (action.type){
-		case SIGN.LOGIN_PENDING :
-		case SIGN.REGISTER_PENDING :
-		case SIGN.LOGOUT :
-			return initialState
-		case SIGN.LOGIN_SUCCESS :
+		case SIGN.LOGIN_PENDING:
+		case SIGN.REGISTER_PENDING:
 			return {
-				...sign,
-				login: true,
-				error: false,
+				loggingIn: true,
+				user: action
 			};
-		case SIGN.LOGIN_ERROR :
+		case SIGN.LOGIN_SUCCESS:
 			return {
-				...sign,
-				login: false,
-				error: true,
+				loggedIn: true,
+				user: action.user,
 			};
-		case SIGN.REGISTER_SUCCESS :
+		case SIGN.LOGIN_ERROR:
 			return {
-				...sign,
-				register: true,
-				error: false,
+				loggedIn: false,
+				error: action.error
 			};
-		case SIGN.REGISTER_ERROR :
-			return {
-				...sign,
-				register: false,
-				error: true,
-			};
+		case SIGN.LOGOUT:
+			return {};
 		default:
-			return initialState
+			return state
 	}
 };
