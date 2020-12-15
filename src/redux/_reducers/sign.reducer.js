@@ -4,8 +4,6 @@ let user = JSON.parse(localStorage.getItem('user'));
 let token = JSON.parse(localStorage.getItem('token'));
 const initialState = user ? { loggedIn: true, error: false, user, token } : {};
 
-console.log(user, token)
-
 export const sign = (state = initialState, action) => {
 	switch (action.type){
 		case SIGN.LOGIN_PENDING:
@@ -20,6 +18,7 @@ export const sign = (state = initialState, action) => {
 				user: action.user,
 			};
 		case SIGN.LOGIN_ERROR:
+		case SIGN.REGISTER_ERROR:
 			return {
 				loggedIn: false,
 				error: action.error

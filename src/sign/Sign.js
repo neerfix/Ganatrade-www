@@ -33,17 +33,12 @@ function Sign(props) {
 		})
 	}
 
-	const register = (e) => {
+	const register = async (e) => {
 		e.preventDefault();
+		const { dispatch } = props
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
-		if(validate.value) {
-			const newUser = {
-				username: fields.username,
-				email: fields.emailRegister,
-				// password: bcryptjs.hashSync(fields.passwordRegister, salt),
-				birthdate: fields.birthdate
-			}
-			console.log(newUser)
+		if(validate) {
+			await dispatch(signActions.register(fields))
 		}
 	}
 
@@ -104,6 +99,48 @@ function Sign(props) {
 									</div>
 								</div>
 								<div className="mb-1">
+									<div className="grid grid-cols-2 gap-4">
+										<div>
+											<label htmlFor="firstname"
+												   className="block text-sm font-medium text-gray-700">Prénom</label>
+											<div className="mt-1 relative rounded-md shadow-sm">
+												<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+													 style={{ minWidth: '30px' }}
+												>
+											<span className="text-gray-500 sm:text-sm">
+												<i className="gg-user" />
+											</span>
+												</div>
+												<input type="text" id="firstname" name="firstname" required
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="Prénom" onChange={(e) => inputChange(e)} />
+											</div>
+											<div className="validation-message">
+												{errorMessage.firstname}
+											</div>
+										</div>
+										<div>
+											<label htmlFor="lastname"
+												   className="block text-sm font-medium text-gray-700">Nom de famille</label>
+											<div className="mt-1 relative rounded-md shadow-sm">
+												<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+													 style={{ minWidth: '30px' }}
+												>
+											<span className="text-gray-500 sm:text-sm">
+												<i className="gg-user" />
+											</span>
+												</div>
+												<input type="text" id="lastname" name="lastname" required
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="Nom de famille" onChange={(e) => inputChange(e)} />
+											</div>
+											<div className="validation-message">
+												{errorMessage.lastname}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div className="mb-1">
 									<label htmlFor="email"
 										   className="block text-sm font-medium text-gray-700">Adresse email</label>
 									<div className="mt-1 relative rounded-md shadow-sm">
@@ -161,7 +198,7 @@ function Sign(props) {
 									</div>
 								</div>
 								<div className="mb-1">
-									<label htmlFor="birthdate"
+									<label htmlFor="dateOfBirth"
 										   className="block text-sm font-medium text-gray-700">Date de naissance</label>
 									<div className="mt-1 relative rounded-md shadow-sm">
 										<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -171,12 +208,12 @@ function Sign(props) {
 												<i className="gg-calendar-dates" />
 											</span>
 										</div>
-										<input type="date" id="birthdate" name="birthdate" required
+										<input type="date" id="dateOfBirth" name="dateOfBirth" required
 											   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 											   onChange={(e) => inputChange(e)} />
 									</div>
 									<div className="validation-message">
-										{errorMessage.birthdate}
+										{errorMessage.dateOfBirth}
 									</div>
 								</div>
 							</div>

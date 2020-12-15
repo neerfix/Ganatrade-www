@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import apiConfig from "../../config/api.config";
 import signConstants from "../_constants/sign.constants"
+import { signUp } from "../../api/register"
 
 const login = (email, password) => async dispatch => {
 
@@ -36,6 +37,26 @@ const login = (email, password) => async dispatch => {
 	function failure(error) { return { type: signConstants.LOGIN_ERROR, error }}
 }
 
+const register = ({ username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth }) => async dispatch => {
+
+	dispatch(request({ username }));
+
+	await signUp(username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth)
+		.then(
+			user => {
+				dispatch(success(user))
+			},
+			error => {
+				dispatch(failure(error))
+			}
+		)
+
+	function request(user) { return { type: signConstants.REGISTER_PENDING, user }}
+	function success(user) { return { type: signConstants.REGISTER_SUCCESS, user }}
+	function failure(error) { return { type: signConstants.REGISTER_ERROR, error }}
+}
+
 export const signActions = {
 	login,
+	register
 }
