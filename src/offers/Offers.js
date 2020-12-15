@@ -11,7 +11,7 @@ import filterList from '../assets/icons/filterList.gif';
 // Loading
 import loading from '../assets/img/loading.gif';
 
-// Loading
+// Error
 import errorImg from '../assets/img/error.png';
 
 import {OfferCard} from '../components/OfferCard';

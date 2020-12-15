@@ -5,6 +5,9 @@ import './Offer.scss';
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
 
+// Profil de l'utilisateur
+import {OfferUser} from '../components/OfferUser';
+
 class Offer extends React.Component {
 
 	state = {
@@ -82,19 +85,19 @@ class Offer extends React.Component {
 								</span>
 							</h1>
 						</div>
+						 
 						<div id="offerUser" className="bg-white rounded mt-5 p-5">
-							<div className="flex">
-								{
-									this.state.user && this.state.user.avatar && 
-									<div className="userAvatar rounded overflow-hidden">
-										<img  src={this.state.user.avatar} alt="" /> 
-									</div>
-									|| 
-									<Skeleton height={50} width={50} />
-								}
-
-							</div>
+							{
+								this.state.user ? 
+								(
+									<OfferUser user={this.state.user} />
+								) : (
+									<Skeleton height={300} />
+								)
+							}
+							<hr className="my-5"></hr>
 						</div>
+
 					</div>
 				</main>
 			</div>
