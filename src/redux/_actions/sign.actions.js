@@ -17,13 +17,7 @@ const login = (email, password) => async dispatch => {
 				if(user) {
 					localStorage.setItem('user', JSON.stringify(user));
 					localStorage.setItem('token', JSON.stringify(refreshToken));
-					if(user.rank) {
-						if(user.rank === "admin" || user.rank === "super_admin") {
-							dispatch(success({ ...user, refreshToken }))
-						}
-					} else {
-						dispatch(failure("Tu n'as pas accès à l'administration"))
-					}
+					dispatch(success({ ...user, refreshToken }));
 				}
 			}).catch(e => {
 				dispatch(failure(e.message))

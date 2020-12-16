@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import './Sign.scss';
 
@@ -25,6 +25,14 @@ function Sign(props) {
 	const [fields, setFields] = useState({})
 	const [errorMessage, setErrorMessage] = useState({})
 
+	useEffect(() => {
+		let error = tradErrors(props.sign.error)
+		setErrorMessage({
+			...errorMessage,
+			emailLogin: error
+		})
+	}, [props.sign.error]);
+
 	const inputChange = (e) => {
 		const { name, value } = e.target
 		setFields({
@@ -36,9 +44,18 @@ function Sign(props) {
 	const register = async (e) => {
 		e.preventDefault();
 		const { dispatch } = props
+		const age = calculateAge(new Date(fields.birthdate))
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
 		if(validate) {
-			await dispatch(signActions.register(fields))
+			if(age >= 18) {
+				setErrorMessage({})
+				await dispatch(signActions.register(fields))
+			} else {
+				setErrorMessage({
+					...errorMessage,
+					birthdate: 'L\' âge minimum requis est de 18 ans'
+				})
+			}
 		}
 	}
 
@@ -48,22 +65,44 @@ function Sign(props) {
 		await dispatch(signActions.login(fields.emailLogin, fields.passwordLogin))
 	}
 
+	const calculateAge = (birthday) => { // birthday is a date
+		let ageDifMs = Date.now() - birthday.getTime();
+		let ageDate = new Date(ageDifMs); // miliseconds from epoch
+		return Math.abs(ageDate.getUTCFullYear() - 1970);
+	}
+
 	const validator = (password, confirm) => {
 		if(password !== confirm) {
 			setErrorMessage({
 				...errorMessage,
-				password: 'Les mots de passse de sont pas identiques'
+				passwordRegister: 'Les mots de passse de sont pas identiques'
 			})
 			return false
 		} else if(!strongRegex.test(password)) {
 			setErrorMessage({
 				...errorMessage,
-				password: 'Le mot de passe doit contenir aux moins 8 caractères, 1 majuscule et 1 chiffre'
+				passwordRegister: 'Le mot de passe doit contenir aux moins 8 caractères, 1 majuscule et 1 chiffre'
 			})
 			return false
 		}
-		setErrorMessage({})
+		setErrorMessage({
+			...errorMessage,
+			passwordRegister: ''
+		})
 		return true
+	}
+
+	const tradErrors = (message) => {
+		let traduction = ''
+		switch (message) {
+			case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+				traduction = 'L\' adresse email est invalide'
+				break
+			case 'The password is invalid or the user does not have a password.':
+				traduction = 'Le mot de passe est incorrect'
+				break
+		}
+		return traduction
 	}
 
 	return(
@@ -175,7 +214,7 @@ function Sign(props) {
 											   placeholder="***********" onChange={(e) => inputChange(e)} />
 									</div>
 									<div className="validation-message">
-										{errorMessage.password}
+										{errorMessage.passwordRegister}
 									</div>
 								</div>
 								<div className="mb-1">
@@ -198,7 +237,7 @@ function Sign(props) {
 									</div>
 								</div>
 								<div className="mb-1">
-									<label htmlFor="dateOfBirth"
+									<label htmlFor="birthdate"
 										   className="block text-sm font-medium text-gray-700">Date de naissance</label>
 									<div className="mt-1 relative rounded-md shadow-sm">
 										<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -208,12 +247,12 @@ function Sign(props) {
 												<i className="gg-calendar-dates" />
 											</span>
 										</div>
-										<input type="date" id="dateOfBirth" name="dateOfBirth" required
+										<input type="date" id="birthdate" name="birthdate" required
 											   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 											   onChange={(e) => inputChange(e)} />
 									</div>
 									<div className="validation-message">
-										{errorMessage.dateOfBirth}
+										{errorMessage.birthdate}
 									</div>
 								</div>
 							</div>
@@ -245,7 +284,7 @@ function Sign(props) {
 						<form className="space-y-6 bg-white shadow p-4 rounded-md" onSubmit={(e) => login(e)}>
 							<input type="hidden" name="remember" value="true" />
 							<div className="rounded-md">
-								<div className="mb-6">
+								<div className="mb-1">
 									<label htmlFor="email"
 										   className="block text-sm font-medium text-gray-700">Adresse email</label>
 									<div className="mt-1 relative rounded-md shadow-sm">
@@ -260,8 +299,11 @@ function Sign(props) {
 											   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 											   placeholder="adresse@email.com" onChange={(e) => inputChange(e)} />
 									</div>
+									<div className="validation-message">
+										{errorMessage.emailLogin}
+									</div>
 								</div>
-								<div className="mb-6">
+								<div className="mb-1">
 									<label htmlFor="password"
 										   className="block text-sm font-medium text-gray-700">Mot de passe</label>
 									<div className="mt-1 relative rounded-md shadow-sm">
