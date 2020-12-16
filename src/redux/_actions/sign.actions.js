@@ -20,15 +20,15 @@ const login = (email, password) => async dispatch => {
 					dispatch(success({ ...user, refreshToken }));
 				}
 			}).catch(e => {
-				dispatch(failure(e.message))
+				dispatch(failure('login', e.message))
 			})
 		}).catch(e => {
-			dispatch(failure(e.message))
+			dispatch(failure('login', e.message))
 		})
 
 	function request(user) { return { type: signConstants.LOGIN_PENDING, user }}
 	function success(user) { return { type: signConstants.LOGIN_SUCCESS, user }}
-	function failure(error) { return { type: signConstants.LOGIN_ERROR, error }}
+	function failure(type, message) { return { type: signConstants.REGISTER_ERROR, error: { type: type, message: message } }}
 }
 
 const register = ({ username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth }) => async dispatch => {
@@ -36,18 +36,17 @@ const register = ({ username, firstname, lastname, emailRegister, passwordRegist
 	dispatch(request({ username }));
 
 	await signUp(username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth)
-		.then(
-			user => {
+		.then(response => response.json()).then(user => {
+			if(user.code === 'auth/email-already-exists') {
+				dispatch(failure('register', 'Email already exist'))
+			} else {
 				dispatch(success(user))
-			},
-			error => {
-				dispatch(failure(error))
 			}
-		)
+		})
 
 	function request(user) { return { type: signConstants.REGISTER_PENDING, user }}
 	function success(user) { return { type: signConstants.REGISTER_SUCCESS, user }}
-	function failure(error) { return { type: signConstants.REGISTER_ERROR, error }}
+	function failure(type, message) { return { type: signConstants.REGISTER_ERROR, error: { type: type, message: message } }}
 }
 
 export const signActions = {

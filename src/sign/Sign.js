@@ -26,11 +26,18 @@ function Sign(props) {
 	const [errorMessage, setErrorMessage] = useState({})
 
 	useEffect(() => {
-		let error = tradErrors(props.sign.error)
-		setErrorMessage({
-			...errorMessage,
-			emailLogin: error
-		})
+		let error = tradErrors(props.sign.error.message)
+		if(props.sign.error.type === 'login') {
+			setErrorMessage({
+				...errorMessage,
+				emailLogin: error
+			})
+		} else {
+			setErrorMessage({
+				...errorMessage,
+				emailRegister: error
+			})
+		}
 	}, [props.sign.error]);
 
 	const inputChange = (e) => {
@@ -100,6 +107,9 @@ function Sign(props) {
 				break
 			case 'The password is invalid or the user does not have a password.':
 				traduction = 'Le mot de passe est incorrect'
+				break
+			case 'Email already exist':
+				traduction = 'L\' adresse email est déjà utilisée'
 				break
 		}
 		return traduction
