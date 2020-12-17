@@ -8,7 +8,7 @@
         }
     }
 
-    .offerImg{
+    .offerImg a{
         background-image: url(/assets/img/placeholder.png);
         height: 200px;
         background-size: cover;
@@ -16,10 +16,19 @@
         display:flex;
         align-items: center;
         justify-content: center;
+        position: relative;
 
         img{
             transition: all .1s;
         }
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            box-shadow: inset 0px 0px 15px rgba(0,0,0,.2);
+        }
+
     }
 
     .offerContent{
@@ -103,8 +112,8 @@
         
                 img{
                     position: absolute;
-                    width: 100%;
-                    height: auto;
+                    min-height: 100%;
+                    min-width: 100%;
                 }
             }
         }

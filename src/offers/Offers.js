@@ -11,7 +11,7 @@ import filterList from '../assets/icons/filterList.gif';
 // Loading
 import loading from '../assets/img/loading.gif';
 
-// Loading
+// Error
 import errorImg from '../assets/img/error.png';
 
 import {OfferCard} from '../components/OfferCard';
@@ -165,7 +165,7 @@ class Offers extends React.Component {
 						{this.state.filters.map((filter, j) => {
 							return ( 
 								<div key={j} className="filterItem flex m-1 ml-4 uppercase border-2 border-green-500 px-2 py-1 bg-green-200 uppercase text-green-700 rounded-full">
-									<span class="mr-2">{filter}</span>
+									<span className="mr-2">{filter}</span>
 									<button onClick={this.toggleFilter} filter="">
 										<i className="gg-close"></i>
 									</button>
@@ -198,7 +198,7 @@ class Offers extends React.Component {
 						<div className="w-1/2 m-auto flex-column items-center justify-center">
 							<img src={errorImg} className="m-auto" alt="Une erreur est survenue !" />
 							<button className="flex items-center w-1/2 flex items-center justify-center px-5 py-3 border border-transparent cursor-pointer font-medium rounded-md text-black bg-white hover:text-primary m-auto" onClick={() => this.retryFetch()}>
-								<i class="gg-redo mr-5"></i>
+								<i className="gg-redo mr-5"></i>
 								<span>Réessayer</span>
 							</button>
 						</div>

@@ -4,6 +4,8 @@ import './OfferCard.scss';
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
 
+import placeholder from '../assets/img/placeholder.png';
+
 
 class OfferCard extends React.Component {
 
@@ -36,7 +38,9 @@ class OfferCard extends React.Component {
                 {/* Photo de l'offre */}
                 <div className="offerImg"> 
                     {this.props.offer.pictures ? (
-                            <img className="w-full" src={this.props.offer.pictures[0]} alt="Aucun aperçu de cette offre" />
+                        <a title="Consulter l'offre" href={"/offers/" + this.props.offer.id}>
+                            <img className="w-full" src={ ( Array.isArray(this.props.offer.pictures) ? this.props.offer.pictures[0] : this.props.offer.pictures) || placeholder} alt="" />
+                        </a>
                         ) : (
                             <Skeleton height={200} />
                     )}
@@ -61,35 +65,38 @@ class OfferCard extends React.Component {
                             <div className="offerTarget py-2">
                                 <small className="offerTarget flex text-base roboto-bold">
                                     <i className="gg-arrows-exchange mr-5"></i>
-                                    Échange contre : {this.props.offer.trade.target || "peu importe"}
+                                    Échange contre : { ( this.props.offer.trade && this.props.offer.trade.target ) ? this.props.offer.trade.target : "peu importe"}
                                 </small>
                             </div>
 
                         {/* Tags */}
-                        {this.props.offer.tags.length > 0 &&
-                            <div className="offerTags rounded flex flex-wrap align-items-center py-2">
-                                <i className="gg-tag mr-3 p-1"></i>
-                                {this.props.offer.tags.map((tag, i) => {
-                                    return (
-                                        <button
-                                            key={i} 
-                                            onClick={this.toggleFilter}
-                                            className="tag flex align-items-center bg-gray-100 rounded-full text-sm roboto-medium text-green-600 pr-1 mr-1">
-                                            {tag}
-                                        </button>
-                                    )
-                                })}
-                            </div>
-                        }
+                        <div className="offerTags rounded flex flex-wrap align-items-center py-2">
+                            <i className="gg-tag mr-3 p-1"></i>
+                            {this.props.offer.tags && this.props.offer.tags.map((tag, i) => {
+                                return (
+                                    <button
+                                        key={i} 
+                                        onClick={this.toggleFilter}
+                                        className="tag flex align-items-center bg-gray-100 rounded-full text-sm roboto-medium text-green-600 pr-1 mr-1">
+                                        {tag}
+                                    </button>
+                                )
+                            })}
+                            {!this.props.offer.tags &&
+                                <span className="tag flex align-items-center bg-gray-100 rounded-full text-sm roboto-medium text-green-600 pr-1 mr-1">
+                                    Aucun tag
+                                </span>
+                            }
+                        </div>
                         
                         {/* Utilisateur */}
                         <div className="my-3">
                             <a className="offerUser flex flex-wrap flex-end align-items-center text-primary" 
                                 href={'/profile/'+this.props.offer.user_id}
                                 title="Accéder au profil de l'annonceur">
-                                <span>Posté par <b>{this.state.user.username || <Skeleton height={15}/> }</b></span>
+                                <span className="flex">Posté par <b className="ml-1"> {this.state.user.username || <Skeleton height={15}/> }</b></span>
                                 <div className="offerUserPicture rounded overflow-hidden flex align-items-center">
-                                    <img src={this.state.user.avatar} alt="" />
+                                    <img src={this.state.user.avatar || placeholder} alt="" />
                                 </div>
                             </a>
                         </div>
