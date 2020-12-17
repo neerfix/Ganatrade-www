@@ -1,4 +1,5 @@
 import SIGN from '../_constants/sign.constants';
+import USER from '../_constants/user.constants'
 
 let user = JSON.parse(localStorage.getItem('user'));
 let token = JSON.parse(localStorage.getItem('token'));

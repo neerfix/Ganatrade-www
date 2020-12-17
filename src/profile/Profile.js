@@ -64,13 +64,13 @@ function Profile(props) {
 
 	const saveModifications = (e) => {
 		e.preventDefault()
-		const { address, city, zipcode, ...userWithout } = user
+		const { address, city, zipCode, ...userWithout } = user
 		const userUpdate = {
 			...userWithout,
 			address: {
 				street: address,
 				city: city,
-				zipcode: zipcode
+				zipcode: zipCode
 			}
 		}
 		console.log(userUpdate)
