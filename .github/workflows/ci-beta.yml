@@ -35,4 +35,4 @@ jobs:
           cd /srv/ganatrade/www-beta/ 
           sudo git fetch 
           sudo git reset --hard origin/develop 
-          make install'
+          make'
