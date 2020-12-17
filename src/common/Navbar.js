@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { connect } from 'react-redux'
 import './Navbar.scss';
+
+import { Menu, Transition } from "@headlessui/react";
 
 import Logo from '../assets/img/logo.png'
 
-function Navbar() {
+function Navbar(props) {
+
+	const [show, setShow] = useState(false);
 
 	return(
 		<nav className="bg-white shadow-md">
@@ -58,11 +63,85 @@ function Navbar() {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								<a href="/sign" className="px-3 py-2 text-sm roboto-bold text-black flex items-center">
-									<i className="gg-log-in"></i>
-									<span className="ml-4">CONNEXION / INSCRIPTION</span>
-								</a>
-								<a href="/guide" className="ml-3 px-3 py-2 text-sm roboto-bold text-black flex items-center">
+								{props.sign.user ?
+									<div className="relative flex items-center">
+										<div className="relative inline-block text-left">
+											<Menu>
+												{({ open }) => (
+													<>
+														<span className="rounded-md shadow-sm">
+															<Menu.Button className="inline-flex justify-center w-48 px-6 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-black border border-transparent rounded-md">
+																<span>{props.sign.user.username}</span>
+															</Menu.Button>
+														</span>
+
+														<Transition
+															show={open}
+															enter="transition ease-out duration-100"
+															enterFrom="transform opacity-0 scale-95"
+															enterTo="transform opacity-100 scale-100"
+															leave="transition ease-in duration-75"
+															leaveFrom="transform opacity-100 scale-100"
+															leaveTo="transform opacity-0 scale-95"
+														>
+															<Menu.Items
+																static
+																className="absolute right-0 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md mt-1 shadow-2xl outline-none"
+																style={{ zIndex: '10000' }}
+															>
+																<div className="py-1">
+																	<Menu.Item>
+																		{({ active }) => (
+																			<a href={"/profile/" + props.sign.user.id}
+																				className={`${
+																					active
+																						? "bg-gray-100 text-gray-900"
+																						: "text-gray-700"
+																				} flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
+																			>
+																				<div className="w-4 mr-3">
+																					<i className="gg-user"></i>
+																				</div>
+																				Profil
+																			</a>
+																		)}
+																	</Menu.Item>
+																</div>
+																<div className="py-1">
+																	<Menu.Item>
+																		{({ active }) => (
+																			<a href="#sign-out"
+																				className={`${
+																					active
+																						? "bg-gray-100 text-gray-900"
+																						: "text-gray-700"
+																				} flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
+																			>
+																				<div className="w-4 ml-2 mr-5 flex justify-center">
+																					<i className="gg-log-out"></i>
+																				</div>
+																				Déconnexion
+																			</a>
+																		)}
+																	</Menu.Item>
+																</div>
+															</Menu.Items>
+														</Transition>
+													</>
+												)}
+											</Menu>
+										</div>
+										<a href="/sign" className="w-48 flex items-center justify-center ml-5 px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:text-white hover:bg-secondary-dark">
+											<span>Ajouter une offre</span>
+										</a>
+									</div>
+									:
+									<a href="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
+										<i className="gg-log-in"></i>
+										<span className="ml-4">CONNEXION / INSCRIPTION</span>
+									</a>
+								}
+								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
 									<i className="gg-info"></i>
 									<span className="ml-2">GUIDE</span>
 								</a>
@@ -92,4 +171,12 @@ function Navbar() {
 
 }
 
-export { Navbar }
+function mapStateToProps(state) {
+	const { sign } = state
+	return {
+		sign
+	};
+}
+
+const connectedNavbar = connect(mapStateToProps)(Navbar);
+export { connectedNavbar as Navbar };
