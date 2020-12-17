@@ -27,6 +27,7 @@ function App() {
 				<ScrollToTop />
 				<Switch>
 					<Route exact path="/" component={Landing} />
+					<Route exact path="/offers/:id" component={Offer} />
 					<Route exact path="/offers" component={Offers} />
 					<Route exact path="/sign" component={Sign}  />
 					<Route exact path="/password/forgot" />
