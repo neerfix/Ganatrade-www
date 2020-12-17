@@ -57,6 +57,7 @@ class Offers extends React.Component {
 			this.setState({categories: categories, loading: false});
 		} catch ( e ) {
 			this.setState({error: true, loading: false});
+			console.log(categories_call);
 			console.log(e);
 		}
 

@@ -4,8 +4,8 @@ import './OfferCard.scss';
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
 
-// Loading
 import placeholder from '../assets/img/placeholder.png';
+
 
 class OfferCard extends React.Component {
 
