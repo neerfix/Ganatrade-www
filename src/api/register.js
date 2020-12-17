@@ -8,7 +8,7 @@ export function signUp(username, firstname, lastname, email, password, birthdate
 	}
 
 	return fetch(`${apiConfig}users`, requestOptions)
-		.then(user => {
-			return user;
+		.then((response) => {
+			return response.json();
 		})
 }
