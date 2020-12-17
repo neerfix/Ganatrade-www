@@ -1,5 +1,8 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+
+import PrivateRoute from "./router/PrivateRoute"
+import ScrollToTop from "./router/scrollToTop"
 
 // Components
 import { Navbar } from './common/Navbar'
@@ -13,10 +16,14 @@ import { NewOffer } from './newoffer/NewOffer'
 import { Guide } from './guide/Guide'
 
 function App() {
+
+	let history = useHistory();
+
 	return (
 		<div>
 			<Navbar />
-			<Router>
+			<Router history={history}>
+				<ScrollToTop />
 				<Switch>
 					<Route exact path="/" component={Landing} />
 					<Route exact path="/offers/:id" component={Offer} />

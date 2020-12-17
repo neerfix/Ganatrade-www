@@ -1,0 +1,15 @@
+#sign {
+
+	.h-screen-remaining {
+		min-height: calc(100vh - 64px);
+	}
+
+	.validation-message {
+		min-height: 20px;
+		font-size: 0.75rem;
+		line-height: 1.25rem;
+		padding: 0 0.25rem;
+		color: #AA2121;
+	}
+
+}
