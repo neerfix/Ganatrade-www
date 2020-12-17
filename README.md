@@ -2,6 +2,7 @@
 ![GitHub issues](https://img.shields.io/github/issues-raw/ganatrade/www)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/ganatrade/www)
 
+
 _Project by : 
 [Aimee Ritleng](https://github.com/Aimee-RTLNG), 
 [Notararigo Nicolas](https://github.com/Neerfix), 
