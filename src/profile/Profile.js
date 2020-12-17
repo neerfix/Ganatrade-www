@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux'
 import './Profile.scss';
 
-import { CardReview } from '../common/CardReview'
+import {CardReview} from '../common/CardReview'
 
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-function Profile() {
+import moment from 'moment';
+import 'moment/locale/fr'
+
+function Profile(props) {
+
+	const [user, setUser] = useState(props.sign.user)
 
 	const responsive = {
 		desktop: {
@@ -35,6 +41,32 @@ function Profile() {
 		}
 	};
 
+	useEffect(() => {
+		setUser({
+			...user,
+			creationDate: moment.unix(user.created_at._seconds).format('MMMM YYYY'),
+			lastLogin: moment.unix(user.last_login._seconds).format('Do MMMM YYYY')
+		})
+	}, []);
+
+	const inputChange = (e) => {
+		const { name, value } = e.target
+		setUser({
+			...user,
+			[name]: value
+		})
+	}
+
+	const cancelModifications = (e) => {
+		e.preventDefault()
+		setUser(props.sign.user)
+	}
+
+	const saveModifications = (e) => {
+		e.preventDefault()
+		console.log(user)
+	}
+
 	return(
 		<div id="profile">
 			<div className="container py-10">
@@ -50,12 +82,12 @@ function Profile() {
 										title="Woman holding a mug">
 									</div>
 									<div className="bg-white rounded-b lg:rounded-b-none lg:rounded-r px-4 py-2 leading-normal">
-										<div className="text-black font-bold text-xl mb-3">Fan2Chaussett</div>
+										<div className="text-black font-bold text-xl mb-3">{user.username}</div>
 										<div className="text-black font-medium text-l mb-3">Mittelschaeffolsheim, BAS-RHIN</div>
 										<div className="mb-4">
-											<p className="text-grey-darker text-sm mb-0">Membre depuis septembre 2017</p>
+											<p className="text-grey-darker text-sm mb-0">Membre depuis {user.creationDate}</p>
 											<p className="text-grey-darker text-sm mb-0">Temps de réponse : 30 minutes</p>
-											<p className="text-grey-darker text-sm mb-0">Vu il y a 2 heures</p>
+											<p className="text-grey-darker text-sm mb-0">Dernière connexion le {user.lastLogin}</p>
 										</div>
 										<div className="flex items-center px-2">
 											<div id="stars" className="flex h-3.5 mr-6">
@@ -87,9 +119,9 @@ function Profile() {
 													<i className="gg-user" />
 												</span>
 											</div>
-											<input type="text" id="username" name="username" required
-												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-												   placeholder="Pseudo" />
+											<input type="text" id="username" name="username" required defaultValue={user.username}
+												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+												   placeholder="Pseudo" onChange={(e) => inputChange(e)} />
 										</div>
 									</div>
 									<div className="mb-4">
@@ -103,9 +135,9 @@ function Profile() {
 													<i className="gg-mail" />
 												</span>
 											</div>
-											<input type="email" id="email" name="email" required
-												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-												   placeholder="Email" />
+											<input type="email" id="email" name="email" required defaultValue={user.email}
+												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+												   placeholder="Email" onChange={(e) => inputChange(e)} />
 										</div>
 									</div>
 									<div>
@@ -120,8 +152,8 @@ function Profile() {
 												</span>
 											</div>
 											<input type="password" id="password" name="password" required
-												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-												   placeholder="**********" />
+												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+												   placeholder="**********" onChange={(e) => inputChange(e)} />
 										</div>
 									</div>
 								</div>
@@ -141,9 +173,9 @@ function Profile() {
 														<i className="gg-user" />
 													</span>
 												</div>
-												<input type="text" id="firstname" name="firstname" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-													   placeholder="Prénom" />
+												<input type="text" id="firstname" name="firstname" required defaultValue={user.firstname}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="Prénom" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 										<div className="">
@@ -157,9 +189,9 @@ function Profile() {
 														<i className="gg-user" />
 													</span>
 												</div>
-												<input type="text" id="lastname" name="lastname" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-													   placeholder="Pseudo" />
+												<input type="text" id="lastname" name="lastname" required defaultValue={user.lastname}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="Nom de famille" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 									</div>
@@ -175,8 +207,9 @@ function Profile() {
 														<i className="gg-calendar-dates" />
 													</span>
 												</div>
-												<input type="date" id="birthdate" name="birthdate" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md" />
+												<input type="date" id="birthdate" name="birthdate" required defaultValue={user.birthdate}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 										<div className="">
@@ -190,9 +223,9 @@ function Profile() {
 														<i className="gg-smartphone" />
 													</span>
 												</div>
-												<input type="text" id="phone" name="phone" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-													   placeholder="0612345678" />
+												<input type="text" id="phone" name="phone" required  defaultValue={user.phone}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="0612345678" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 									</div>
@@ -207,9 +240,9 @@ function Profile() {
 													<i className="gg-globe-alt" />
 												</span>
 											</div>
-											<input type="text" id="address" name="address" required
-												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-												   placeholder="1 Rue de la République" />
+											<input type="text" id="address" name="address" required defaultValue={user.address?.street}
+												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+												   placeholder="1 Rue de la République" onChange={(e) => inputChange(e)} />
 										</div>
 									</div>
 									<div className="grid grid-cols-3 gap-4 mb-4">
@@ -224,9 +257,9 @@ function Profile() {
 														<i className="gg-globe-alt" />
 													</span>
 												</div>
-												<input type="text" id="city" name="city" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-													   placeholder="Paris" />
+												<input type="text" id="city" name="city" required defaultValue={user.address?.city}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="Paris" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 										<div className="">
@@ -240,16 +273,17 @@ function Profile() {
 														<i className="gg-globe-alt" />
 													</span>
 												</div>
-												<input type="text" id="zipCode" name="zipCode" required
-													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 py-1 sm:text-sm border-gray-light rounded-md"
-													   placeholder="95000" />
+												<input type="text" id="zipCode" name="zipCode" required defaultValue={user.address?.zipcode}
+													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
+													   placeholder="95000" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 									</div>
 								</div>
 
 								<div className="grid grid-cols-6 gap-4 px-4 pb-3 mb-2">
-									<button className="col-start-1 col-end-3 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red hover:bg-red-dark">
+									<button className="col-start-1 col-end-3 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red hover:bg-red-dark"
+										onClick={cancelModifications}>
 										<div className="flex items-center">
 											<span className="mr-2 sm:text-sm">
 												<i className="gg-close-o bg-white text-red" />
@@ -257,7 +291,8 @@ function Profile() {
 											Annuler
 										</div>
 									</button>
-									<button className="col-end-7 col-span-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary hover:bg-secondary-dark">
+									<button className="col-end-7 col-span-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary hover:bg-secondary-dark"
+										onClick={saveModifications}>
 										<div className="flex items-center">
 											<span className="mr-2 sm:text-sm">
 												<i className="gg-check-o bg-white text-secondary" />
@@ -414,4 +449,12 @@ function Profile() {
 
 }
 
-export { Profile }
+function mapStateToProps(state) {
+	const { sign } = state
+	return {
+		sign
+	};
+}
+
+const connectedProfilePage = connect(mapStateToProps)(Profile);
+export { connectedProfilePage as Profile };
