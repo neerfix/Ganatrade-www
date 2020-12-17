@@ -1,5 +1,5 @@
 import React from 'react'
-{ BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 
 import PrivateRoute from "./router/PrivateRoute"
 import ScrollToTop from "./router/scrollToTop"
