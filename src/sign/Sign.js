@@ -26,19 +26,41 @@ function Sign(props) {
 	const [errorMessage, setErrorMessage] = useState({})
 
 	useEffect(() => {
-		let error = tradErrors(props.sign.error.message)
-		if(props.sign.error.type === 'login') {
-			setErrorMessage({
-				...errorMessage,
-				emailLogin: error
-			})
-		} else {
-			setErrorMessage({
-				...errorMessage,
-				emailRegister: error
-			})
+		if(props.sign.error) {
+			let error = tradErrors(props.sign.error.message)
+			if(props.sign.error.type === 'login') {
+				setErrorMessage({
+					...errorMessage,
+					emailLogin: error
+				})
+			} else {
+				setErrorMessage({
+					...errorMessage,
+					emailRegister: error
+				})
+			}
 		}
 	}, [props.sign.error]);
+
+	useEffect(() => {
+		if(props.sign.user && props.sign.loggedIn) {
+			if(props.sign.user.id) {
+				history.push('/profile/' + props.sign.user.id)
+			}
+		}
+	}, [props.sign.loggedIn]);
+
+	useEffect(() => {
+		async function loginAfterRegister() {
+			if(props.sign.user && props.sign.registered) {
+				if(props.sign.user.id) {
+					const { dispatch } = props
+					await dispatch(signActions.login(fields.emailRegister, fields.passwordRegister))
+				}
+			}
+		}
+		loginAfterRegister()
+	}, [props.sign.registered]);
 
 	const inputChange = (e) => {
 		const { name, value } = e.target
@@ -50,32 +72,20 @@ function Sign(props) {
 
 	const register = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
-		const age = calculateAge(new Date(fields.birthdate))
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
 		if(validate) {
-			if(age >= 18) {
-				setErrorMessage({})
-				await dispatch(signActions.register(fields))
-			} else {
-				setErrorMessage({
-					...errorMessage,
-					birthdate: 'L\' âge minimum requis est de 18 ans'
-				})
-			}
+			setErrorMessage({})
+			await dispatch(signActions.register(fields))
 		}
 	}
 
 	const login = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
 		await dispatch(signActions.login(fields.emailLogin, fields.passwordLogin))
-	}
-
-	const calculateAge = (birthday) => { // birthday is a date
-		let ageDifMs = Date.now() - birthday.getTime();
-		let ageDate = new Date(ageDifMs); // miliseconds from epoch
-		return Math.abs(ageDate.getUTCFullYear() - 1970);
 	}
 
 	const validator = (password, confirm) => {
@@ -109,6 +119,7 @@ function Sign(props) {
 				traduction = 'Le mot de passe est incorrect'
 				break
 			case 'Email already exist':
+			case 'The email address is already in use by another account.':
 				traduction = 'L\' adresse email est déjà utilisée'
 				break
 		}
@@ -244,25 +255,6 @@ function Sign(props) {
 									</div>
 									<div className="validation-message">
 										{errorMessage.passwordConfirm}
-									</div>
-								</div>
-								<div className="mb-1">
-									<label htmlFor="birthdate"
-										   className="block text-sm font-medium text-gray-700">Date de naissance</label>
-									<div className="mt-1 relative rounded-md shadow-sm">
-										<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-											 style={{ minWidth: '30px' }}
-										>
-											<span className="text-gray-500 sm:text-sm">
-												<i className="gg-calendar-dates" />
-											</span>
-										</div>
-										<input type="date" id="birthdate" name="birthdate" required
-											   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
-											   onChange={(e) => inputChange(e)} />
-									</div>
-									<div className="validation-message">
-										{errorMessage.birthdate}
 									</div>
 								</div>
 							</div>

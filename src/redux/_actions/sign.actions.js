@@ -9,7 +9,6 @@ const login = (email, password) => async dispatch => {
 
 	firebase.auth().signInWithEmailAndPassword(email, password)
 		.then(r => {
-			console.log(r)
 			const refreshToken = r.user.refreshToken
 			fetch(apiConfig + "users/" + r.user.uid, {
 				// headers: {'Authorization': token},
@@ -28,19 +27,19 @@ const login = (email, password) => async dispatch => {
 
 	function request(user) { return { type: signConstants.LOGIN_PENDING, user }}
 	function success(user) { return { type: signConstants.LOGIN_SUCCESS, user }}
-	function failure(type, message) { return { type: signConstants.REGISTER_ERROR, error: { type: type, message: message } }}
+	function failure(type, message) { return { type: signConstants.LOGIN_ERROR, error: { type: type, message: message } }}
 }
 
-const register = ({ username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth }) => async dispatch => {
+const register = ({ username, firstname, lastname, emailRegister, passwordRegister, birthdate }) => async dispatch => {
 
 	dispatch(request({ username }));
 
-	await signUp(username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth)
-		.then(response => response.json()).then(user => {
-			if(user.code === 'auth/email-already-exists') {
-				dispatch(failure('register', 'Email already exist'))
+	await signUp(username, firstname, lastname, emailRegister, passwordRegister, birthdate)
+		.then((response) => {
+			if(response.code) {
+				dispatch(failure('register', response.message))
 			} else {
-				dispatch(success(user))
+				dispatch(success(response))
 			}
 		})
 

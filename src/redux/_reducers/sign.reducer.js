@@ -2,7 +2,7 @@ import SIGN from '../_constants/sign.constants';
 
 let user = JSON.parse(localStorage.getItem('user'));
 let token = JSON.parse(localStorage.getItem('token'));
-const initialState = user ? { loggingIn: false, loggedIn: true, error: false, user, token } : {};
+const initialState = user ? { pending: false, loggedIn: false, registered: false, error: false, user, token } : {};
 
 export const sign = (state = initialState, action) => {
 	switch (action.type){
@@ -10,7 +10,7 @@ export const sign = (state = initialState, action) => {
 		case SIGN.REGISTER_PENDING:
 			return {
 				...state,
-				loggingIn: true,
+				pending: true,
 				user: action.user,
 				error: false
 			};
@@ -21,10 +21,19 @@ export const sign = (state = initialState, action) => {
 				user: action.user,
 				error: false
 			};
+		case SIGN.REGISTER_SUCCESS:
+			return {
+				...state,
+				registered: true,
+				user: action.user,
+				error: false
+			};
 		case SIGN.LOGIN_ERROR:
 		case SIGN.REGISTER_ERROR:
 			return {
 				...state,
+				pending: false,
+				registered: false,
 				loggedIn: false,
 				error: action.error
 			};
