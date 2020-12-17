@@ -7,6 +7,107 @@
             position: absolute;
             top: -1.25rem;
         }
+
+        .offerPictures{
+            height: 400px;
+
+
+            .fullscreen-group{
+                height: 100%;
+
+                .images {
+                    display: flex;
+                    overflow-x: scroll;
+
+                    & > div {
+                        margin-right: 15px;
+                        height: 400px;
+                        min-width: 400px;
+                        display: flex;
+                        position: relative;
+                    }
+                }
+
+                .fullscreen-container{
+                    max-width: 400px;
+                    overflow: hidden;
+                }
+
+                .fullscreen-image {
+                    max-width: 400px;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    img{
+                        width: auto;
+                        max-width: none;
+                        height: 400px;
+                        margin: auto;
+                    }
+                }
+
+                &.fullscreen-group--expanded{
+                    overflow: visible;
+
+                    .fullscreen-container{
+                        max-width: none;
+                        overflow: visible;
+                    }
+
+                    .fullscreen-image {
+                        overflow: visible;
+                    }
+
+                    .images {
+                        overflow-x: visible;
+                    }
+
+                    img{
+                        max-height: 100%;
+                        margin: auto;
+                        width: initial;
+                    }
+                }
+            }
+            
+        }
+    }
+
+    .offerPlace{
+        img{
+            width: 100%;
+            transition: all .2s;
+        }
+
+        .offerPlaceMap{
+            width: 100%;
+            height: 270px;
+            overflow: hidden;
+            position: relative;
+
+            &:hover{
+                img{
+                    max-width: 150%;
+                    width: 150%;
+                }
+
+                &:after{
+                    content:'🔍';
+                    font-size: 50px;
+                    text-align: center;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0; left: 0; bottom: 0; right: 0;
+                    background: rgba(0,0,0,.5); 
+                }
+            }
+        }
     }
 
 }

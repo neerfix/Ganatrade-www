@@ -4,6 +4,8 @@ import './OfferCard.scss';
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
 
+// Loading
+import placeholder from '../assets/img/placeholder.png';
 
 class OfferCard extends React.Component {
 
@@ -37,7 +39,7 @@ class OfferCard extends React.Component {
                 <div className="offerImg"> 
                     {this.props.offer.pictures ? (
                         <a title="Consulter l'offre" href={"/offers/" + this.props.offer.id}>
-                            <img className="w-full" src={this.props.offer.pictures[0]} alt="Aucun aperçu de cette offre" />
+                            <img className="w-full" src={ ( Array.isArray(this.props.offer.pictures) ? this.props.offer.pictures[0] : this.props.offer.pictures) || placeholder} alt="" />
                         </a>
                         ) : (
                             <Skeleton height={200} />
@@ -63,7 +65,7 @@ class OfferCard extends React.Component {
                             <div className="offerTarget py-2">
                                 <small className="offerTarget flex text-base roboto-bold">
                                     <i className="gg-arrows-exchange mr-5"></i>
-                                    Échange contre : { ( this.props.offer.trade ) ? this.props.offer.trade.target : "peu importe"}
+                                    Échange contre : { ( this.props.offer.trade && this.props.offer.trade.target ) ? this.props.offer.trade.target : "peu importe"}
                                 </small>
                             </div>
 
@@ -94,7 +96,7 @@ class OfferCard extends React.Component {
                                 title="Accéder au profil de l'annonceur">
                                 <span className="flex">Posté par <b className="ml-1"> {this.state.user.username || <Skeleton height={15}/> }</b></span>
                                 <div className="offerUserPicture rounded overflow-hidden flex align-items-center">
-                                    <img src={this.state.user.avatar} alt="" />
+                                    <img src={this.state.user.avatar || placeholder} alt="" />
                                 </div>
                             </a>
                         </div>

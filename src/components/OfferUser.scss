@@ -1,6 +1,11 @@
 #offerUser {
 
+    h2{
+        font-size: 1.5rem;
+    }
+
     .userAvatar {
+        min-width: 125px;
         width: 125px;
         height: 125px;
         overflow: hidden;
@@ -9,9 +14,27 @@
         align-items: center;
         justify-content: center;
 
-        img{
+        img{  
+            min-width: 125px;
             width: 100%;
         }
     }
+     
+    .rating{
+        max-width: 75px;
+
+        .rating__background {
+            fill: #c0c0c0;
+            stroke-width: 1;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .rating__value {
+            fill: #ffc64b;
+            height: 100%;
+        }
+    }
+
 
 }
