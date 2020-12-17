@@ -26,19 +26,30 @@ function Sign(props) {
 	const [errorMessage, setErrorMessage] = useState({})
 
 	useEffect(() => {
-		let error = tradErrors(props.sign.error.message)
-		if(props.sign.error.type === 'login') {
-			setErrorMessage({
-				...errorMessage,
-				emailLogin: error
-			})
-		} else {
-			setErrorMessage({
-				...errorMessage,
-				emailRegister: error
-			})
+		if(props.sign.error) {
+			let error = tradErrors(props.sign.error.message)
+			if(props.sign.error.type === 'login') {
+				setErrorMessage({
+					...errorMessage,
+					emailLogin: error
+				})
+			} else {
+				setErrorMessage({
+					...errorMessage,
+					emailRegister: error
+				})
+			}
 		}
 	}, [props.sign.error]);
+
+	useEffect(() => {
+		if(props.sign.user) {
+			if(props.sign.user.id) {
+				console.log(props.sign.user)
+				history.push('/profile/' + props.sign.user.id)
+			}
+		}
+	}, [props.sign.user]);
 
 	const inputChange = (e) => {
 		const { name, value } = e.target
