@@ -31,18 +31,29 @@ module.exports = {
 			'black': '#000000',
 			'white': '#FFFFFF',
 			'gray': '#6b7280',
+			'gray-light': '#f5f6f9',
 			'primary': '#49B794',
 			'primary-dark': '#41a485',
 			'primary-light': '#c8e9df',
 			'secondary': '#219AAA',
 			'secondary-dark': '#1d8795',
 			'secondary-light': '#bfecf2',
+		},
+		ringColor: {
+			'primary': '#49B794',
+			'secondary': '#219AAA',
+		},
+		borderColor: {
+			'primary': '#49B794',
+			'secondary': '#219AAA',
+			'gray-light': '#f5f6f9',
 		}
 	},
 	variants: {
 		boxShadow: ['group-hover'],
 	},
 	plugins: [
+		require('@tailwindcss/forms'),
 		function ({ addComponents }) {
 			addComponents({
 				'.container': {
