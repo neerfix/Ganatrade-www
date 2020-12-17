@@ -26,19 +26,30 @@ function Sign(props) {
 	const [errorMessage, setErrorMessage] = useState({})
 
 	useEffect(() => {
-		let error = tradErrors(props.sign.error.message)
-		if(props.sign.error.type === 'login') {
-			setErrorMessage({
-				...errorMessage,
-				emailLogin: error
-			})
-		} else {
-			setErrorMessage({
-				...errorMessage,
-				emailRegister: error
-			})
+		if(props.sign.error) {
+			let error = tradErrors(props.sign.error.message)
+			if(props.sign.error.type === 'login') {
+				setErrorMessage({
+					...errorMessage,
+					emailLogin: error
+				})
+			} else {
+				setErrorMessage({
+					...errorMessage,
+					emailRegister: error
+				})
+			}
 		}
 	}, [props.sign.error]);
+
+	useEffect(() => {
+		if(props.sign.user) {
+			if(props.sign.user.id) {
+				console.log(props.sign.user)
+				history.push('/profile/' + props.sign.user.id)
+			}
+		}
+	}, [props.sign.user]);
 
 	const inputChange = (e) => {
 		const { name, value } = e.target
@@ -50,6 +61,7 @@ function Sign(props) {
 
 	const register = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
 		const age = calculateAge(new Date(fields.birthdate))
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
@@ -68,6 +80,7 @@ function Sign(props) {
 
 	const login = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
 		await dispatch(signActions.login(fields.emailLogin, fields.passwordLogin))
 	}

@@ -14,13 +14,14 @@ import { Offer } from './offer/Offer'
 import { Offers } from './offers/Offers'
 import { NewOffer } from './newoffer/NewOffer'
 import { Guide } from './guide/Guide'
+import { Profile } from './profile/Profile'
 
 function App() {
 
 	let history = useHistory();
 
 	return (
-		<div>
+		<div className="bg-gray-light-3">
 			<Navbar />
 			<Router history={history}>
 				<ScrollToTop />
@@ -31,6 +32,7 @@ function App() {
 					<Route exact path="/password/forgot" />
 					<Route exact path="/guide" component={Guide}/>
 					<Route exact path="/newoffer" component={NewOffer}/>
+					<Route exact path="/profile/:id" component={Profile}/>
 				</Switch>
 			</Router>
 		</div>
