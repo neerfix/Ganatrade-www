@@ -50,6 +50,7 @@ function Sign(props) {
 
 	const register = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
 		const age = calculateAge(new Date(fields.birthdate))
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
@@ -68,6 +69,7 @@ function Sign(props) {
 
 	const login = async (e) => {
 		e.preventDefault();
+		setErrorMessage({})
 		const { dispatch } = props
 		await dispatch(signActions.login(fields.emailLogin, fields.passwordLogin))
 	}

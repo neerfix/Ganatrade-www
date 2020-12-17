@@ -52,7 +52,6 @@ module.exports = {
 			'primary': '#49B794',
 			'secondary': '#219AAA'
 		},
-		},
 		ringColor: {
 			'primary': '#49B794',
 			'secondary': '#219AAA',
@@ -61,7 +60,7 @@ module.exports = {
 			'primary': '#49B794',
 			'secondary': '#219AAA',
 			'gray-light': '#f5f6f9',
-		}
+		},
 	},
 	variants: {
 		boxShadow: ['group-hover'],
@@ -92,4 +91,4 @@ module.exports = {
 			});
 		},
 	],
-};
+}
