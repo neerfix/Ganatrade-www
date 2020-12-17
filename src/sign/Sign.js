@@ -66,15 +66,14 @@ function Sign(props) {
 		const age = calculateAge(new Date(fields.birthdate))
 		const validate = validator(fields.passwordRegister, fields.passwordConfirm)
 		if(validate) {
-			if(age >= 18) {
-				setErrorMessage({})
-				await dispatch(signActions.register(fields))
-			} else {
+			if(age < 18) {
 				setErrorMessage({
 					...errorMessage,
 					birthdate: 'L\' âge minimum requis est de 18 ans'
 				})
 			}
+			setErrorMessage({})
+			await dispatch(signActions.register(fields))
 		}
 	}
 

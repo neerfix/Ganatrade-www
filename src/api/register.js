@@ -1,10 +1,10 @@
 import apiConfig from "../config/api.config"
 
-export function signUp(username, firstname, lastname, email, password, dateOfBirth) {
+export function signUp(username, firstname, lastname, email, password, birthdate) {
 	const requestOptions = {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ username, firstname, lastname, email, password, dateOfBirth })
+		body: JSON.stringify({ username, firstname, lastname, email, password, birthdate })
 	}
 
 	return fetch(`${apiConfig}users`, requestOptions)

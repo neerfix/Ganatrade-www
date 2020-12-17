@@ -31,11 +31,11 @@ const login = (email, password) => async dispatch => {
 	function failure(type, message) { return { type: signConstants.REGISTER_ERROR, error: { type: type, message: message } }}
 }
 
-const register = ({ username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth }) => async dispatch => {
+const register = ({ username, firstname, lastname, emailRegister, passwordRegister, birthdate }) => async dispatch => {
 
 	dispatch(request({ username }));
 
-	await signUp(username, firstname, lastname, emailRegister, passwordRegister, dateOfBirth)
+	await signUp(username, firstname, lastname, emailRegister, passwordRegister, birthdate)
 		.then(response => response.json()).then(user => {
 			if(user.code === 'auth/email-already-exists') {
 				dispatch(failure('register', 'Email already exist'))
