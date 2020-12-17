@@ -64,7 +64,16 @@ function Profile(props) {
 
 	const saveModifications = (e) => {
 		e.preventDefault()
-		console.log(user)
+		const { address, city, zipcode, ...userWithout } = user
+		const userUpdate = {
+			...userWithout,
+			address: {
+				street: address,
+				city: city,
+				zipcode: zipcode
+			}
+		}
+		console.log(userUpdate)
 	}
 
 	return(
