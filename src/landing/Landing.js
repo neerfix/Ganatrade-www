@@ -1,6 +1,8 @@
 import React from 'react';
 import './Landing.scss';
 
+import { Link } from 'react-router-dom'
+
 function Landing(props) {
 
 	function goToRoute(route) {
@@ -121,11 +123,10 @@ function Landing(props) {
 					</h2>
 					<div className="mt-8 lex lg:mt-0 lg:flex-shrink-0">
 						<div className="inline-flex rounded-md shadow">
-							<a onClick={() => goToRoute('/sign')}
-								href="/sign"
+							<Link to="/sign"
 							    className="w-full flex items-center justify-center px-5 py-3 border border-transparent cursor-pointer font-medium rounded-md text-black bg-white hover:text-primary">
 								Inscription
-							</a>
+							</Link>
 						</div>
 					</div>
 				</div>

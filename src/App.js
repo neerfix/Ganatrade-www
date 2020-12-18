@@ -28,12 +28,12 @@ function App() {
 				<ScrollToTop />
 				<Switch>
 					<Route exact path="/" component={withRouter(Landing)} />
-					<Route exact path="/offers/:id" component={Offer} />
-					<Route exact path="/offers" component={Offers} />
-					<Route exact path="/sign" component={Sign}  />
+					<Route exact path="/offers/:id" component={withRouter(Offer)} />
+					<Route exact path="/offers" component={withRouter(Offers)} />
+					<Route exact path="/sign" component={withRouter(Sign)} />
 					<Route exact path="/password/forgot" />
-					<Route exact path="/guide" component={Guide}/>
-					<Route exact path="/newoffer" component={NewOffer}/>
+					<Route exact path="/guide" component={withRouter(Guide)}/>
+					<PrivateRoute exact path="/newoffer/:id?" component={withRouter(NewOffer)}/>
 					<PrivateRoute exact path="/profile/:id" component={withRouter(Profile)} />
 				</Switch>
 			</Router>
