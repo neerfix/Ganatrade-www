@@ -1,6 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import './Offer.scss';
+
 
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
@@ -60,7 +61,7 @@ class Offer extends React.Component {
 			fetchOffer().then( offer => {
 				if(!offer){
 					throw new Error(offer);
-				} else {	
+				} else {
 					this.setState({offer: offer, loading: false});
 					if( this.state.offer.trade && this.state.offer.trade.place && this.state.offer.trade.place.longitude ){
 						this.state.map_url = 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/' + this.state.offer.trade.place.longitude + ',' + this.state.offer.trade.place.latitude + ',12.7,0.00,0.00/400x300@2x?access_token=pk.eyJ1IjoiYWltZWVyaXRsZW5nIiwiYSI6ImNrYnl3cHNkYTB4dHEycm5hdWNlc3lyOWUifQ.0JJSaUTh5i90t6xL0gmVyQ';
@@ -71,7 +72,7 @@ class Offer extends React.Component {
 					fetchUser(user_url).then( user => {
 						if(!user){
 							throw new Error(user);
-						} else {	
+						} else {
 							this.setState({user: user, loading: false});
 						}
 					}).catch( error => {
@@ -91,7 +92,7 @@ class Offer extends React.Component {
 								fetchUser(trade_user_url).then( user => {
 									if(!user){
 										throw new Error(user);
-									} else {	
+									} else {
 										trade.user = user;
 									}
 									this.setState({trades : [...this.state.trades, trade]});
@@ -101,7 +102,7 @@ class Offer extends React.Component {
 								});
 								return trade;
 							})
-							
+
 							console.log(offer);
 							console.log(trades);
 						}
@@ -165,7 +166,7 @@ class Offer extends React.Component {
 										)}
 									</div>
 
-									{ !this.state.offer || this.state.loading ? 
+									{ !this.state.offer || this.state.loading ?
 										(
 											<div>
 												<Skeleton height={300} className="mt-3"/>
@@ -177,16 +178,16 @@ class Offer extends React.Component {
 												{/* Informations produit */}
 												<div className="flex justify-between my-5 px-2">
 													<div className="w-2/5">
-														{ this.state.offer.product && this.state.offer.product.condition && 
+														{ this.state.offer.product && this.state.offer.product.condition &&
 															<p>ÉTAT : <span className="roboto-bold">{this.state.offer.product.condition}</span></p>
 														}
-														{ this.state.offer.trade.method && 
+														{ this.state.offer.trade.method &&
 															<p>METHODE : <span className="roboto-bold">{this.state.offer.trade.method}</span></p>
 														}
-														{ this.state.offer.trade.estimation && 
+														{ this.state.offer.trade.estimation &&
 															<p>VALEUR : <span className="roboto-bold">{this.state.offer.trade.estimation}</span>€</p>
 														}
-														{ this.state.offer.trade.target && 
+														{ this.state.offer.trade.target &&
 															<p>CONTRE : <span className="roboto-bold">{this.state.offer.trade.target}</span></p>
 														}
 													</div>
@@ -201,7 +202,7 @@ class Offer extends React.Component {
 													{/* Tags */}
 													<div className="flex items-center">
 														<i className="gg-tag mr-5 p-1"></i>
-														{ this.state.offer.tags ? 
+														{ this.state.offer.tags ?
 															(
 																this.state.offer.tags.map( (tag, i) => {
 																return (
@@ -223,7 +224,7 @@ class Offer extends React.Component {
 														<i className="gg-eye mr-3"></i>
 														<span className="mr-1">{ this.state.offer.views || "0" }</span>
 														vues
-														{ ( this.state.offer.views > 500 ) && " 🔥" } 
+														{ ( this.state.offer.views > 500 ) && " 🔥" }
 													</div>
 												</div>
 											</div>
@@ -234,23 +235,23 @@ class Offer extends React.Component {
 
 							{/* Offres */}
 							<div id="offerComments" className="rounded mt-5">
-								
+
 								<div className="flex justify-between">
 									<h2 className="text-3xl tracking-tight roboto-bold text-gray-900 ml-3">
 										<span className="block xl:inline">
 											Propositions d'échange
 										</span>
 									</h2>
-									{this.state.offer && 
-										<a className="flex items-center p-2 bg-primary text-white rounded-md hover:bg-white"
-											href={ "/newoffer/" + this.state.offer.id }>
+									{this.state.offer &&
+										<Link className="flex items-center p-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+											to={ "/newoffer/" + this.state.offer.id }>
 											Faire une proposition
-										</a>
+										</Link>
 									}
 								</div>
 
 								<div className="mt-5">
-									{ this.state.trades ? 
+									{ this.state.trades ?
 										(
 											<div>
 												{ this.state.trades.length > 0 ? (
@@ -261,13 +262,13 @@ class Offer extends React.Component {
 																		<img src={trade.user.avatar} alt="" />
 																	</div>
 																	<div>
-																		<p>Posté par 
-																			<a title="Consulter le profil"
+																		<p>Posté par
+																			<Link title="Consulter le profil"
 																				className="ml-1"
-																				href={"/profile/" + trade.user.id} >
-																				{trade.user.username} 
-																			</a>
-																			{trade.date_of_trade && 
+																				to={"/profile/" + trade.user.id} >
+																				{trade.user.username}
+																			</Link>
+																			{trade.date_of_trade &&
 																				<span className="ml-1">{moment.unix(trade.date_of_trade._seconds).fromNow()}</span>
 																			}
 																		</p>
@@ -275,7 +276,7 @@ class Offer extends React.Component {
 																</div>
 															)
 														})
-													) : ( 
+													) : (
 														// Aucun échange proposé
 														<div className="flex items-center justify-center overflow-hidden bg-white p-3 mb-3">
 															<i className="gg-smile-sad mr-3"></i>
@@ -305,12 +306,12 @@ class Offer extends React.Component {
 							</div>
 
 						</div>
-						 
+
 						<div id="offerUser" className="rounded mt-5 p-5">
 
 							{/* Carte utilisateur */}
 							{
-								this.state.user ? 
+								this.state.user ?
 								(
 									<OfferUser user={this.state.user} />
 								) : (
@@ -323,7 +324,7 @@ class Offer extends React.Component {
 							{/* Rayon d'échange */}
 							<div>
 								{
-									this.state.offer.trade && this.state.offer.trade.place && this.state.offer.trade.place.name ?  
+									this.state.offer.trade && this.state.offer.trade.place && this.state.offer.trade.place.name ?
 									(
 										<div className="flex justify-between mb-3">
 											<p>RAYON D'ÉCHANGE</p>
@@ -340,20 +341,20 @@ class Offer extends React.Component {
 										</div>
 									)
 								}
-								
+
 								{/* Emplacement de l'offre */}
 								<div className="offerPlace">
 									{
-										this.state.map_url ? 
+										this.state.map_url ?
 										(
 											<a className="offerPlaceMap flex items-center justify-center" title="Voir sur le plan"
 												target="_blank" rel="noreferrer"
 												href={"https://www.google.fr/maps/?q=" + this.state.offer.trade.place.name}>
-												<img alt="Carte statique Mapbox de la zone d'échange" 
+												<img alt="Carte statique Mapbox de la zone d'échange"
 												src={this.state.map_url} />
 											</a>
 										) : (
-											<img alt="Carte statique Mapbox de la zone d'échange" 
+											<img alt="Carte statique Mapbox de la zone d'échange"
 												src='https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/3.1246,46.8675,3.08,0/300x200?access_token=pk.eyJ1IjoiYWltZWVyaXRsZW5nIiwiYSI6ImNrYnl3cHNkYTB4dHEycm5hdWNlc3lyOWUifQ.0JJSaUTh5i90t6xL0gmVyQ' />
 										)
 									}
@@ -365,7 +366,7 @@ class Offer extends React.Component {
 
 							{/* Signaler */}
 							{
-								this.state.user && this.state.user ? 
+								this.state.user && this.state.user ?
 								(
 									<div className="w-full flex align-center justify-around">
 										<div className="flex items-center justify-center border border-transparent cursor-pointer font-medium rounded-md text-black hover:text-primary">
@@ -383,7 +384,7 @@ class Offer extends React.Component {
 									</div>
 								)
 							}
-							
+
 						</div>
 					</div>
 				</main>

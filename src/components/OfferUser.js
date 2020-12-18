@@ -1,6 +1,8 @@
 import React from 'react';
 import './OfferUser.scss';
 
+import { Link } from 'react-router-dom'
+
 // Moment js
 import moment from 'moment';
 import 'moment/locale/fr'
@@ -20,7 +22,7 @@ class OfferUser extends React.Component {
         },
         reviews: '',
     }
-    
+
     async componentDidMount() {
 
 		// Récupération des reviews
@@ -34,7 +36,7 @@ class OfferUser extends React.Component {
         fetchReviews().then( reviews => {
             if(!reviews){
                 throw new Error(reviews);
-            } else {	
+            } else {
                 this.setState({reviews: reviews, loading: false});
                 const rowLen = reviews.length;
                 reviews.map( (review, i) => {
@@ -56,29 +58,29 @@ class OfferUser extends React.Component {
     render(){
         return(
             <div key={this.props.user.id} id="offerUser">
-                <a href={"/profile/" + this.props.user.id } className="flex items-center">
+                <Link to={"/profile/" + this.props.user.id } className="flex items-center">
                     {/* Avatar */}
                     <div className="userAvatar rounded overflow-hidden mr-3">
-                        { this.props.user.avatar ? 
+                        { this.props.user.avatar ?
                         (
-                                <img src={this.props.user.avatar || placeholder} alt="" /> 
+                                <img src={this.props.user.avatar || placeholder} alt="" />
                             ) : (
                                 <img src={placeholder} alt="" /> 
                             )
                         }
                     </div>
-                
+
                     <div>
                         {/* Nom de l'utilisateur */}
 
                         <h2 className="roboto-bold">
                             {this.props.user.username || <Skeleton height={20} /> }
                         </h2>
-                        
+
                         <p className="flex items-center my-1">
                             <i className="gg-pin mr-2"></i>
                             <span>
-                                { 
+                                {
                                     this.props.user.address || this.props.user.city ? (
                                        (  this.props.user.city || this.props.user.address.city )
                                     ) : (
@@ -131,7 +133,7 @@ class OfferUser extends React.Component {
                             )
                         }
                     </div>
-                </a>
+                </Link>
             </div>
         )
     }

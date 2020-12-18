@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import './Navbar.scss';
 
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { signActions } from "../redux/_actions/sign.actions";
 
@@ -33,19 +33,10 @@ function Navbar(props) {
 									 alt="Workflow" />
 							</Link>
 						</div>
-					</div>
-					<div className="hidden md:block">
-						<div className="flex items-center">
-							<Link to="/offers" className="mr-3 px-3 text-sm roboto-bold text-black">
+						<div className="ml-5">
+							<Link to="/offers" className="mr-3 px-3 text-sm roboto-bold text-black hover:text-primary">
 								OFFRES
 							</Link>
-							<div className="-space-y-px">
-								<div className="w-96">
-									<input id="search" name="search" type="text"
-										   className="appearance-none relative block w-full px-3 py-2 border border-black placeholder-black text-black ring-indigo-500 focus:outline-none focus:ring-indigo-500 focus:border-green-500 focus:z-10 sm:text-sm"
-										   placeholder="Recherche" />
-								</div>
-							</div>
 						</div>
 					</div>
 					<div className="hidden md:block">
@@ -82,7 +73,7 @@ function Navbar(props) {
 												{({ open }) => (
 													<>
 														<span className="rounded-md shadow-sm">
-															<Menu.Button className="inline-flex justify-center w-48 px-6 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-black border border-transparent rounded-md">
+															<Menu.Button className="inline-flex justify-center w-48 px-6 py-2 text-base roboto-bold text-white transition duration-150 ease-in-out bg-black border border-transparent rounded-md">
 																<span>{props.sign.user.username}</span>
 															</Menu.Button>
 														</span>
@@ -109,25 +100,13 @@ function Navbar(props) {
 																					  active
 																						  ? "bg-gray-100 text-gray-900"
 																						  : "text-gray-700"
-																				  } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
+																				  } flex items-center w-full px-7 py-2 text-base roboto-bold leading-5 text-left uppercase hover:text-primary`}
 																			>
 																				<div className="w-4 mr-3">
 																					<i className="gg-user"></i>
 																				</div>
 																				Profil
 																			</Link>
-																			/*<a href={"/profile/" + props.sign.user.id}
-																				className={`${
-																					active
-																						? "bg-gray-100 text-gray-900"
-																						: "text-gray-700"
-																				} flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
-																			>
-																				<div className="w-4 mr-3">
-																					<i className="gg-user"></i>
-																				</div>
-																				Profil
-																			</a>*/
 																		)}
 																	</Menu.Item>
 																</div>
@@ -140,7 +119,7 @@ function Navbar(props) {
 																				   active
 																					   ? "bg-gray-100 text-gray-900"
 																					   : "text-gray-700"
-																			   } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary cursor-pointer`}
+																			   } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase roboto-bold hover:text-primary cursor-pointer`}
 																			>
 																				<div className="w-4 ml-2 mr-5 flex justify-center">
 																					<i className="gg-log-out"></i>
@@ -156,17 +135,17 @@ function Navbar(props) {
 												)}
 											</Menu>
 										</div>
-										<a href="/sign" className="w-48 flex items-center justify-center ml-5 px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-secondary hover:text-white hover:bg-secondary-dark">
+										<Link to="/newoffer" className="w-48 flex items-center justify-center ml-5 px-6 py-2 border border-transparent text-base roboto-bold rounded-md text-white bg-secondary hover:text-white hover:bg-secondary-dark">
 											<span>Ajouter une offre</span>
-										</a>
+										</Link>
 									</div>
 									:
-									<Link to="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
+									<Link to="/sign" className="px-3 py-2 text-sm roboto-bold text-black flex items-center hover:text-primary">
 										<i className="gg-log-in"></i>
 										<span className="ml-4">CONNEXION / INSCRIPTION</span>
 									</Link>
 								}
-								<Link to="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
+								<Link to="/guide" className="ml-3 px-3 py-2 text-sm roboto-bold text-black flex items-center hover:text-primary">
 									<i className="gg-info"></i>
 									<span className="ml-2">GUIDE</span>
 								</Link>
