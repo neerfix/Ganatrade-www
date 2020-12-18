@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import './Sign.scss';
 
+import { Link } from 'react-router-dom'
+
 import { useHistory } from "react-router-dom";
 
 import { signActions } from "../redux/_actions/sign.actions";
@@ -334,9 +336,9 @@ function Sign(props) {
 								</div>
 
 								<div className="text-sm">
-									<a href="/password/forgot" className="font-medium text-secondary hover:text-secondary-dark">
+									<Link href="/password/forgot" className="font-medium text-secondary hover:text-secondary-dark">
 										Mot de passe oublié ?
-									</a>
+									</Link>
 								</div>
 							</div>
 
