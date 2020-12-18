@@ -13,6 +13,11 @@ import 'moment/locale/fr'
 // Zoom on Img
 import { ImageGroup, Image } from 'react-fullscreen-image'
 
+// Placeholder
+import placeholder from '../assets/img/placeholder.png';
+import placeholder1 from '../assets/img/placeholder1.png';
+import placeholder2 from '../assets/img/placeholder2.png';
+
 // Profil de l'utilisateur
 import {OfferUser} from '../components/OfferUser';
 
@@ -62,10 +67,17 @@ class Offer extends React.Component {
 				if(!offer){
 					throw new Error(offer);
 				} else {
+
+					if(!offer.pictures.length){
+						offer.pictures.push(placeholder1);
+						offer.pictures.push(placeholder2);
+					}
+
 					this.setState({offer: offer, loading: false});
 					if( this.state.offer.trade && this.state.offer.trade.place && this.state.offer.trade.place.longitude ){
 						this.state.map_url = 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/' + this.state.offer.trade.place.longitude + ',' + this.state.offer.trade.place.latitude + ',12.7,0.00,0.00/400x300@2x?access_token=pk.eyJ1IjoiYWltZWVyaXRsZW5nIiwiYSI6ImNrYnl3cHNkYTB4dHEycm5hdWNlc3lyOWUifQ.0JJSaUTh5i90t6xL0gmVyQ';
 					}
+
 
 					// Récupération des infos utilisateur
 					const user_url = "https://beta.api.ganatrade.xyz/users/" + this.state.offer.user_id;
