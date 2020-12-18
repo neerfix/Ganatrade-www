@@ -75,6 +75,7 @@ function Navbar(props) {
 														<span className="rounded-md shadow-sm">
 															<Menu.Button className="inline-flex justify-center w-48 px-6 py-2 text-base roboto-bold text-white transition duration-150 ease-in-out bg-black border border-transparent rounded-md">
 																<span>{props.sign.user.username}</span>
+																<i className="gg-chevron-down ml-2"></i>
 															</Menu.Button>
 														</span>
 
