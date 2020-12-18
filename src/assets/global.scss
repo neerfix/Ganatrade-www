@@ -37,8 +37,12 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #262626 !important;
-    background-color: #f5f6f9;
+    background-color: #f1f2f3;
     font-family: 'Roboto-Regular', sans-serif;
+}
+
+#root{
+    min-height: 100vh;
 }
 
 // Nouveau nom de classe et pas de réecriture sur font-xxxx pour éviter les surcouches non voulues

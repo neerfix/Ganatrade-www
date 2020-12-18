@@ -1,10 +1,10 @@
 import apiConfig from "../config/api.config"
 
-export function updateUser(id, username, firstname, lastname, email, password, birthdate, phone, address) {
+export function updateUser(id, username, avatar, firstname, lastname, email, password, birthdate, phone, address) {
 	const requestOptions = {
-		method: 'PATCH',
+		method: 'PUT',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ username, firstname, lastname, email, password, birthdate, phone, address })
+		body: JSON.stringify({ username, avatar, firstname, lastname, email, password, birthdate, phone, address })
 	}
 
 	return fetch(`${apiConfig}users/${id}`, requestOptions)

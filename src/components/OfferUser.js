@@ -65,7 +65,7 @@ class OfferUser extends React.Component {
                         (
                                 <img src={this.props.user.avatar || placeholder} alt="" />
                             ) : (
-                                <Skeleton height={100} width={100} />
+                                <img src={placeholder} alt="" /> 
                             )
                         }
                     </div>
