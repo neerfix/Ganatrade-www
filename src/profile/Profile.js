@@ -1,18 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react'
 import {connect} from 'react-redux'
-import './Profile.scss';
+import './Profile.scss'
+
+import axios from 'axios'
+import apiConfig from '../config/api.config'
+import { userActions } from '../redux/_actions/user.actions'
 
 import {CardReview} from '../common/CardReview'
+import {Switch} from "@headlessui/react"
 
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Carousel from "react-multi-carousel"
+import "react-multi-carousel/lib/styles.css"
 
-import moment from 'moment';
+import moment from 'moment'
 import 'moment/locale/fr'
 
 function Profile(props) {
 
 	const [user, setUser] = useState(props.sign.user)
+	const [reviews, setReviews] = useState([])
+	const [switchNotifs, setSwitchNotifs] = useState(false);
+	const [switchInfos, setSwitchInfos] = useState(false);
 
 	const responsive = {
 		desktop: {
@@ -39,15 +47,31 @@ function Profile(props) {
 			items: 1,
 			partialVisibilityGutter: 30
 		}
-	};
+	}
 
 	useEffect(() => {
 		setUser({
 			...user,
-			creationDate: moment.unix(user.created_at._seconds).format('MMMM YYYY'),
-			lastLogin: moment.unix(user.last_login._seconds).format('Do MMMM YYYY')
+			street: props.sign.user.address?.street,
+			city: props.sign.user.address?.city,
+			zipcode: props.sign.user.address?.zipcode,
+			creationDate: moment.unix(props.sign.user.created_at._seconds).format('MMMM YYYY'),
+			lastLogin: moment.unix(props.sign.user.last_login._seconds).format('Do MMMM YYYY')
 		})
-	}, []);
+
+		axios.get(`${apiConfig}users/${props.sign.user.id}/reviews`)
+			.then((response) => {
+				let reviews = response.data
+				reviews.map(review => {
+					axios.get(`${apiConfig}users/${review.author_id}`)
+						.then((user) => {
+							review.author = user.data
+						})
+				})
+				setReviews(reviews)
+			})
+
+	}, [])
 
 	const inputChange = (e) => {
 		const { name, value } = e.target
@@ -59,21 +83,29 @@ function Profile(props) {
 
 	const cancelModifications = (e) => {
 		e.preventDefault()
-		setUser(props.sign.user)
+		setUser({
+			...props.sign.user,
+			street: props.sign.user.address?.street,
+			city: props.sign.user.address?.city,
+			zipcode: props.sign.user.address?.zipcode,
+			creationDate: moment.unix(props.sign.user.created_at._seconds).format('MMMM YYYY'),
+			lastLogin: moment.unix(props.sign.user.last_login._seconds).format('Do MMMM YYYY')
+		})
 	}
 
-	const saveModifications = (e) => {
+	const saveModifications = async (e) => {
 		e.preventDefault()
-		const { address, city, zipCode, ...userWithout } = user
+		const { dispatch } = props
+		const { street, city, zipcode, ...userWithoutAddress } = user
 		const userUpdate = {
-			...userWithout,
+			...userWithoutAddress,
 			address: {
-				street: address,
+				street: street,
 				city: city,
-				zipcode: zipCode
+				zipcode: zipcode
 			}
 		}
-		console.log(userUpdate)
+		await dispatch(userActions.update(userUpdate))
 	}
 
 	return(
@@ -87,8 +119,8 @@ function Profile(props) {
 							<div className="px-4 py-5 sm:px-6">
 								<div className="w-full lg:flex">
 									<div className="h-48 lg:w-48 sm:rounded-lg flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-										style={{ backgroundImage: "url('https://tailwindcss.com/img/card-left.jpg')" }}
-										title="Woman holding a mug">
+										 style={{ backgroundImage: "url('https://tailwindcss.com/img/card-left.jpg')" }}
+										 title="Woman holding a mug">
 									</div>
 									<div className="bg-white rounded-b lg:rounded-b-none lg:rounded-r px-4 py-2 leading-normal">
 										<div className="text-black font-bold text-xl mb-3">{user.username}</div>
@@ -128,7 +160,7 @@ function Profile(props) {
 													<i className="gg-user" />
 												</span>
 											</div>
-											<input type="text" id="username" name="username" required defaultValue={user.username}
+											<input type="text" id="username" name="username" required value={user.username}
 												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 												   placeholder="Pseudo" onChange={(e) => inputChange(e)} />
 										</div>
@@ -144,7 +176,7 @@ function Profile(props) {
 													<i className="gg-mail" />
 												</span>
 											</div>
-											<input type="email" id="email" name="email" required defaultValue={user.email}
+											<input type="email" id="email" name="email" required value={user.email}
 												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 												   placeholder="Email" onChange={(e) => inputChange(e)} />
 										</div>
@@ -182,7 +214,7 @@ function Profile(props) {
 														<i className="gg-user" />
 													</span>
 												</div>
-												<input type="text" id="firstname" name="firstname" required defaultValue={user.firstname}
+												<input type="text" id="firstname" name="firstname" required value={user.firstname}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   placeholder="Prénom" onChange={(e) => inputChange(e)} />
 											</div>
@@ -198,14 +230,14 @@ function Profile(props) {
 														<i className="gg-user" />
 													</span>
 												</div>
-												<input type="text" id="lastname" name="lastname" required defaultValue={user.lastname}
+												<input type="text" id="lastname" name="lastname" required value={user.lastname}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   placeholder="Nom de famille" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 									</div>
 									<div className="grid grid-cols-2 gap-4 mb-4">
-										<div className="">
+										{/*<div className="">
 											<label htmlFor="birthdate"
 												   className="block text-sm font-medium text-gray-700">Date de naissance</label>
 											<div className="mt-1 relative rounded-md shadow-sm">
@@ -216,11 +248,11 @@ function Profile(props) {
 														<i className="gg-calendar-dates" />
 													</span>
 												</div>
-												<input type="date" id="birthdate" name="birthdate" required defaultValue={user.birthdate}
+												<input type="date" id="birthdate" name="birthdate" required value={user.birthdate}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   onChange={(e) => inputChange(e)} />
 											</div>
-										</div>
+										</div>*/}
 										<div className="">
 											<label htmlFor="phone"
 												   className="block text-sm font-medium text-gray-700">Téléphone</label>
@@ -232,14 +264,14 @@ function Profile(props) {
 														<i className="gg-smartphone" />
 													</span>
 												</div>
-												<input type="text" id="phone" name="phone" required  defaultValue={user.phone}
+												<input type="text" id="phone" name="phone" value={user.phone}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   placeholder="0612345678" onChange={(e) => inputChange(e)} />
 											</div>
 										</div>
 									</div>
 									<div className="mb-4">
-										<label htmlFor="address"
+										<label htmlFor="street"
 											   className="block text-sm font-medium text-gray-700">Adresse</label>
 										<div className="mt-1 relative rounded-md shadow-sm">
 											<div className="flex justify-center absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -249,7 +281,7 @@ function Profile(props) {
 													<i className="gg-globe-alt" />
 												</span>
 											</div>
-											<input type="text" id="address" name="address" required defaultValue={user.address?.street}
+											<input type="text" id="street" name="street" value={user.street}
 												   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 												   placeholder="1 Rue de la République" onChange={(e) => inputChange(e)} />
 										</div>
@@ -266,7 +298,7 @@ function Profile(props) {
 														<i className="gg-globe-alt" />
 													</span>
 												</div>
-												<input type="text" id="city" name="city" required defaultValue={user.address?.city}
+												<input type="text" id="city" name="city" value={user.city}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   placeholder="Paris" onChange={(e) => inputChange(e)} />
 											</div>
@@ -282,7 +314,7 @@ function Profile(props) {
 														<i className="gg-globe-alt" />
 													</span>
 												</div>
-												<input type="text" id="zipCode" name="zipCode" required defaultValue={user.address?.zipcode}
+												<input type="text" id="zipCode" name="zipCode" value={user.zipcode}
 													   className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													   placeholder="95000" onChange={(e) => inputChange(e)} />
 											</div>
@@ -292,7 +324,7 @@ function Profile(props) {
 
 								<div className="grid grid-cols-6 gap-4 px-4 pb-3 mb-2">
 									<button className="col-start-1 col-end-3 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red hover:bg-red-dark"
-										onClick={cancelModifications}>
+											onClick={cancelModifications}>
 										<div className="flex items-center">
 											<span className="mr-2 sm:text-sm">
 												<i className="gg-close-o bg-white text-red" />
@@ -301,7 +333,7 @@ function Profile(props) {
 										</div>
 									</button>
 									<button className="col-end-7 col-span-2 group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-secondary hover:bg-secondary-dark"
-										onClick={saveModifications}>
+											onClick={saveModifications}>
 										<div className="flex items-center">
 											<span className="mr-2 sm:text-sm">
 												<i className="gg-check-o bg-white text-secondary" />
@@ -325,6 +357,27 @@ function Profile(props) {
 											</span>
 											<div className="font-bold text-l">Notifications</div>
 										</div>
+										<div className="w-full max-w-xs mx-auto mt-3">
+											<Switch.Group as="div" className="flex items-center">
+												<Switch
+													as="button"
+													checked={switchNotifs}
+													onChange={setSwitchNotifs}
+													className={`${
+														switchNotifs ? "bg-primary" : "bg-white"
+													} relative inline-flex flex-shrink-0 h-5 shadow-sm transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer w-10 focus:outline-none focus:shadow-outline`}
+												>
+													{({ checked }) => (
+														<span
+															className={`${
+																checked ? "translate-x-5 bg-white border-white" : "translate-x-0 bg-black border-black"
+															} inline-block w-4 h-4 transition duration-200 ease-in-out transform rounded-full border`}
+														/>
+													)}
+												</Switch>
+												<Switch.Label className="ml-4 text-sm">Actions sur mes annonces</Switch.Label>
+											</Switch.Group>
+										</div>
 									</div>
 
 									<div className="bg-secondary-light-2 overflow-hidden rounded-lg px-4 py-3">
@@ -333,6 +386,27 @@ function Profile(props) {
 												<i className="gg-user-list" />
 											</span>
 											<div className="font-bold text-l">Profil privée</div>
+										</div>
+										<div className="w-full max-w-xs mx-auto mt-3">
+											<Switch.Group as="div" className="flex items-center">
+												<Switch
+													as="button"
+													checked={switchInfos}
+													onChange={setSwitchInfos}
+													className={`${
+														switchInfos ? "bg-primary" : "bg-white"
+													} relative inline-flex flex-shrink-0 h-5 shadow-sm transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer w-10 focus:outline-none focus:shadow-outline`}
+												>
+													{({ checked }) => (
+														<span
+															className={`${
+																checked ? "translate-x-5 bg-white border-white" : "translate-x-0 bg-black border-black"
+															} inline-block w-4 h-4 transition duration-200 ease-in-out transform rounded-full border`}
+														/>
+													)}
+												</Switch>
+												<Switch.Label className="ml-4 text-sm">Masquer mes informations</Switch.Label>
+											</Switch.Group>
 										</div>
 									</div>
 
@@ -370,12 +444,12 @@ function Profile(props) {
 								swipeable
 								responsive={responsive}
 							>
-								<CardReview user={{ name: 'Alex', text: 'Je lui ai échangé des chaussettes contre une Toyota Yaris Hybride. . . . .' }} />
-								<CardReview user={{ name: 'Michel', text: 'Échange rapide d\'une paire de socquettes contre un escargot mort (????)' }} />
-								<CardReview user={{ name: 'Morgane', text: '' }} />
-								<CardReview user={{ name: 'Nicolas', text: '' }} />
-								<CardReview user={{ name: 'Corentin', text: '' }} />
-								<CardReview user={{ name: 'Marc', text: '' }} />
+								{reviews.map((review, index) =>
+									<CardReview
+										key={index}
+										review={review}
+									/>
+								)}
 							</Carousel>
 						</div>
 
@@ -405,12 +479,13 @@ function Profile(props) {
 								swipeable
 								responsive={responsive}
 							>
-								<CardReview user={{ name: 'Alex' }} />
+								{/*<CardReview user={{ name: 'Alex' }} />
 								<CardReview user={{ name: 'Michel' }} />
 								<CardReview user={{ name: 'Morgane' }} />
 								<CardReview user={{ name: 'Nicolas' }} />
 								<CardReview user={{ name: 'Corentin' }} />
-								<CardReview user={{ name: 'Marc' }} />
+								<CardReview user={{ name: 'Marc' }} />*/}
+								<div>1</div>
 							</Carousel>
 						</div>
 
@@ -440,12 +515,13 @@ function Profile(props) {
 								swipeable
 								responsive={responsive}
 							>
-								<CardReview user={{ name: 'Alex' }} />
+								{/*<CardReview user={{ name: 'Alex' }} />
 								<CardReview user={{ name: 'Michel' }} />
 								<CardReview user={{ name: 'Morgane' }} />
 								<CardReview user={{ name: 'Nicolas' }} />
 								<CardReview user={{ name: 'Corentin' }} />
-								<CardReview user={{ name: 'Marc' }} />
+								<CardReview user={{ name: 'Marc' }} />*/}
+								<div>1</div>
 							</Carousel>
 						</div>
 

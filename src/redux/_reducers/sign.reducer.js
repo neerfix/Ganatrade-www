@@ -9,6 +9,7 @@ export const sign = (state = initialState, action) => {
 	switch (action.type){
 		case SIGN.LOGIN_PENDING:
 		case SIGN.REGISTER_PENDING:
+		case USER.USER_UPDATE_PENDING:
 			return {
 				...state,
 				pending: true,
@@ -29,6 +30,13 @@ export const sign = (state = initialState, action) => {
 				user: action.user,
 				error: false
 			};
+		case USER.USER_UPDATE_SUCCESS:
+			return {
+				...state,
+				pending: false,
+				user: action.user,
+				error: false
+			};
 		case SIGN.LOGIN_ERROR:
 		case SIGN.REGISTER_ERROR:
 			return {
@@ -39,7 +47,7 @@ export const sign = (state = initialState, action) => {
 				error: action.error
 			};
 		case SIGN.LOGOUT:
-			return {};
+			return initialState;
 		default:
 			return state
 	}

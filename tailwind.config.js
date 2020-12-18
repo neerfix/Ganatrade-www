@@ -53,8 +53,12 @@ module.exports = {
 			'secondary': '#219AAA',
 		},
 		borderColor: {
+			'transparent': 'transparent',
 			'primary': '#49B794',
 			'secondary': '#219AAA',
+			'secondary-light-2': '#f1f9ff',
+			'white': '#ffffff',
+			'black': '#000000',
 			'gray-light': '#f5f6f9',
 		},
 	},

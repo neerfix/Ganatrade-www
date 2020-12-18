@@ -1,6 +1,12 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import './Navbar.scss';
+
+import { BrowserRouter as Router, Link } from 'react-router-dom'
+
+import { signActions } from "../redux/_actions/sign.actions";
+
+import { useHistory } from "react-router-dom";
 
 import { Menu, Transition } from "@headlessui/react";
 
@@ -8,7 +14,13 @@ import Logo from '../assets/img/logo.png'
 
 function Navbar(props) {
 
-	const [show, setShow] = useState(false);
+	let history = useHistory();
+
+	const logout = async () => {
+		const { dispatch } = props
+		await dispatch(signActions.logout())
+		history.push('/')
+	}
 
 	return(
 		<nav className="bg-white shadow-md">
@@ -16,17 +28,17 @@ function Navbar(props) {
 				<div className="flex items-center justify-between h-16">
 					<div className="flex items-center">
 						<div className="flex-shrink-0">
-							<a href="/">
+							<Link to="/">
 								<img className="h-8" src={Logo}
 									 alt="Workflow" />
-							</a>
+							</Link>
 						</div>
 					</div>
 					<div className="hidden md:block">
 						<div className="flex items-center">
-							<a href="/offers" className="mr-3 px-3 text-sm roboto-bold text-black">
+							<Link to="/offers" className="mr-3 px-3 text-sm roboto-bold text-black">
 								OFFRES
-							</a>
+							</Link>
 							<div className="-space-y-px">
 								<div className="w-96">
 									<input id="search" name="search" type="text"
@@ -86,13 +98,25 @@ function Navbar(props) {
 														>
 															<Menu.Items
 																static
-																className="absolute right-0 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md mt-1 shadow-2xl outline-none"
+																className="absolute right-0 w-48 origin-top-right bg-white rounded-md mt-1 shadow-2xl ring-1 ring-primary ring-opacity-5 outline-none"
 																style={{ zIndex: '10000' }}
 															>
 																<div className="py-1">
 																	<Menu.Item>
 																		{({ active }) => (
-																			<a href={"/profile/" + props.sign.user.id}
+																			<Link to={"/profile/" + props.sign.user.id}
+																				  className={`${
+																					  active
+																						  ? "bg-gray-100 text-gray-900"
+																						  : "text-gray-700"
+																				  } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
+																			>
+																				<div className="w-4 mr-3">
+																					<i className="gg-user"></i>
+																				</div>
+																				Profil
+																			</Link>
+																			/*<a href={"/profile/" + props.sign.user.id}
 																				className={`${
 																					active
 																						? "bg-gray-100 text-gray-900"
@@ -103,19 +127,20 @@ function Navbar(props) {
 																					<i className="gg-user"></i>
 																				</div>
 																				Profil
-																			</a>
+																			</a>*/
 																		)}
 																	</Menu.Item>
 																</div>
+																<div className="border-t border-primary mx-6"></div>
 																<div className="py-1">
 																	<Menu.Item>
 																		{({ active }) => (
-																			<a href="#sign-out"
-																				className={`${
-																					active
-																						? "bg-gray-100 text-gray-900"
-																						: "text-gray-700"
-																				} flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary`}
+																			<a onClick={logout}
+																			   className={`${
+																				   active
+																					   ? "bg-gray-100 text-gray-900"
+																					   : "text-gray-700"
+																			   } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase hover:text-primary cursor-pointer`}
 																			>
 																				<div className="w-4 ml-2 mr-5 flex justify-center">
 																					<i className="gg-log-out"></i>
@@ -136,15 +161,15 @@ function Navbar(props) {
 										</a>
 									</div>
 									:
-									<a href="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
+									<Link to="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
 										<i className="gg-log-in"></i>
 										<span className="ml-4">CONNEXION / INSCRIPTION</span>
-									</a>
+									</Link>
 								}
-								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
+								<Link to="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
 									<i className="gg-info"></i>
 									<span className="ml-2">GUIDE</span>
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>
