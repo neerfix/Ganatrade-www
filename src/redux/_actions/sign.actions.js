@@ -48,7 +48,15 @@ const register = ({ username, firstname, lastname, emailRegister, passwordRegist
 	function failure(type, message) { return { type: signConstants.REGISTER_ERROR, error: { type: type, message: message } }}
 }
 
+const logout = () => async dispatch => {
+	localStorage.clear();
+	dispatch(request());
+
+	function request() { return { type: signConstants.LOGOUT }}
+}
+
 export const signActions = {
 	login,
-	register
+	register,
+	logout
 }

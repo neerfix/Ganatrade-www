@@ -1,7 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import { withRouter } from "react-router";
 
-import PrivateRoute from "./router/PrivateRoute"
+import { PrivateRoute } from "./router/PrivateRoute"
 import ScrollToTop from "./router/scrollToTop"
 
 // Components
@@ -22,18 +23,18 @@ function App() {
 
 	return (
 		<div className="bg-gray-light-3">
-			<Navbar />
 			<Router history={history}>
+				<Navbar />
 				<ScrollToTop />
 				<Switch>
-					<Route exact path="/" component={Landing} />
+					<Route exact path="/" component={withRouter(Landing)} />
 					<Route exact path="/offers/:id" component={Offer} />
 					<Route exact path="/offers" component={Offers} />
 					<Route exact path="/sign" component={Sign}  />
 					<Route exact path="/password/forgot" />
 					<Route exact path="/guide" component={Guide}/>
 					<Route exact path="/newoffer" component={NewOffer}/>
-					<Route exact path="/profile/:id" component={Profile}/>
+					<PrivateRoute exact path="/profile/:id" component={withRouter(Profile)} />
 				</Switch>
 			</Router>
 		</div>
