@@ -47,7 +47,7 @@ export const sign = (state = initialState, action) => {
 				error: action.error
 			};
 		case SIGN.LOGOUT:
-			return initialState;
+			return {};
 		default:
 			return state
 	}
