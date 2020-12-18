@@ -37,8 +37,21 @@ body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #262626 !important;
+    background-color: #f1f2f3;
     font-family: 'Roboto-Regular', sans-serif;
 }
+
+#root{
+    min-height: 100vh;
+}
+
+// Nouveau nom de classe et pas de réecriture sur font-xxxx pour éviter les surcouches non voulues
+.roboto-bold{ font-family: 'Roboto-Bold', sans-serif; }
+.roboto-black{ font-family: 'Roboto-Black', sans-serif; }
+.roboto-italic{ font-family: 'Roboto-Italic', sans-serif; }
+.roboto-medium{ font-family: 'Roboto-Medium', sans-serif; }
+.roboto-thin{ font-family: 'Roboto-Thin', sans-serif; }
+.roboto-light{ font-family: 'Roboto-Light', sans-serif; }
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -54,9 +67,14 @@ code {
 a { transition: .3s; }
 a:hover {
     text-decoration: none !important;
-    color: #49B794 !important;
 }
 
 input:focus {
     border-color: #49B794 !important;
 }
+
+i{
+    pointer-events: none;
+}
+
+

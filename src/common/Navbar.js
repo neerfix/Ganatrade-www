@@ -1,9 +1,26 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import './Navbar.scss';
+
+import { Link } from 'react-router-dom'
+
+import { signActions } from "../redux/_actions/sign.actions";
+
+import { useHistory } from "react-router-dom";
+
+import { Menu, Transition } from "@headlessui/react";
 
 import Logo from '../assets/img/logo.png'
 
-function Navbar() {
+function Navbar(props) {
+
+	let history = useHistory();
+
+	const logout = async () => {
+		const { dispatch } = props
+		await dispatch(signActions.logout())
+		history.push('/')
+	}
 
 	return(
 		<nav className="bg-white shadow-md">
@@ -11,24 +28,15 @@ function Navbar() {
 				<div className="flex items-center justify-between h-16">
 					<div className="flex items-center">
 						<div className="flex-shrink-0">
-							<a href="/">
+							<Link to="/">
 								<img className="h-8" src={Logo}
 									 alt="Workflow" />
-							</a>
+							</Link>
 						</div>
-					</div>
-					<div className="hidden md:block">
-						<div className="flex items-center">
-							<a href="/offers" className="mr-3 px-3 text-sm font-medium text-black">
+						<div className="ml-5">
+							<Link to="/offers" className="mr-3 px-3 text-sm roboto-bold text-black hover:text-primary">
 								OFFRES
-							</a>
-							<div className="-space-y-px">
-								<div className="w-96">
-									<input id="search" name="search" type="text"
-										   className="appearance-none relative block w-full px-3 py-2 border border-black placeholder-black text-black ring-indigo-500 focus:outline-none focus:ring-indigo-500 focus:border-green-500 focus:z-10 sm:text-sm"
-										   placeholder="Recherche" />
-								</div>
-							</div>
+							</Link>
 						</div>
 					</div>
 					<div className="hidden md:block">
@@ -58,14 +66,90 @@ function Navbar() {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								<a href="/sign" className="px-3 py-2 text-sm font-medium text-black flex items-center">
-									<i className="gg-log-in"></i>
-									<span className="ml-4">CONNEXION / INSCRIPTION</span>
-								</a>
-								<a href="/guide" className="ml-3 px-3 py-2 text-sm font-medium text-black flex items-center">
+								{props.sign.user ?
+									<div className="relative flex items-center">
+										<div className="relative inline-block text-left">
+											<Menu>
+												{({ open }) => (
+													<>
+														<span className="rounded-md shadow-sm">
+															<Menu.Button className="inline-flex justify-center w-48 px-6 py-2 text-base roboto-bold text-white transition duration-150 ease-in-out bg-black border border-transparent rounded-md">
+																<span>{props.sign.user.username}</span>
+																<i className="gg-chevron-down ml-2"></i>
+															</Menu.Button>
+														</span>
+
+														<Transition
+															show={open}
+															enter="transition ease-out duration-100"
+															enterFrom="transform opacity-0 scale-95"
+															enterTo="transform opacity-100 scale-100"
+															leave="transition ease-in duration-75"
+															leaveFrom="transform opacity-100 scale-100"
+															leaveTo="transform opacity-0 scale-95"
+														>
+															<Menu.Items
+																static
+																className="absolute right-0 w-48 origin-top-right bg-white rounded-md mt-1 shadow-2xl ring-1 ring-primary ring-opacity-5 outline-none"
+																style={{ zIndex: '10000' }}
+															>
+																<div className="py-1">
+																	<Menu.Item>
+																		{({ active }) => (
+																			<Link to={"/profile/" + props.sign.user.id}
+																				  className={`${
+																					  active
+																						  ? "bg-gray-100 text-gray-900"
+																						  : "text-gray-700"
+																				  } flex items-center w-full px-7 py-2 text-base roboto-bold leading-5 text-left uppercase hover:text-primary`}
+																			>
+																				<div className="w-4 mr-3">
+																					<i className="gg-user"></i>
+																				</div>
+																				Profil
+																			</Link>
+																		)}
+																	</Menu.Item>
+																</div>
+																<div className="border-t border-primary mx-6"></div>
+																<div className="py-1">
+																	<Menu.Item>
+																		{({ active }) => (
+																			<a onClick={logout}
+																			   className={`${
+																				   active
+																					   ? "bg-gray-100 text-gray-900"
+																					   : "text-gray-700"
+																			   } flex items-center w-full px-7 py-2 text-base leading-5 text-left uppercase roboto-bold hover:text-primary cursor-pointer`}
+																			>
+																				<div className="w-4 ml-2 mr-5 flex justify-center">
+																					<i className="gg-log-out"></i>
+																				</div>
+																				Déconnexion
+																			</a>
+																		)}
+																	</Menu.Item>
+																</div>
+															</Menu.Items>
+														</Transition>
+													</>
+												)}
+											</Menu>
+										</div>
+										<Link to="/newoffer" className="w-48 flex items-center justify-center ml-5 px-6 py-2 border border-transparent text-base roboto-bold rounded-md text-white bg-secondary hover:text-white hover:bg-secondary-dark">
+											<span>Ajouter une offre</span>
+										</Link>
+									</div>
+									:
+									<Link to="/sign" className="px-3 py-2 text-sm roboto-bold text-black flex items-center hover:text-primary">
+										<i className="gg-log-in"></i>
+										<span className="ml-4">CONNEXION / INSCRIPTION</span>
+									</Link>
+								}
+								<Link to="/guide" className="ml-3 px-3 py-2 text-sm roboto-bold text-black flex items-center hover:text-primary">
 									<i className="gg-info"></i>
 									<span className="ml-2">GUIDE</span>
-								</a>
+								</Link>
 							</div>
 						</div>
 					</div>
@@ -75,12 +159,12 @@ function Navbar() {
 							<span className="sr-only">Open main menu</span>
 							<svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
 								 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
 									  d="M4 6h16M4 12h16M4 18h16"/>
 							</svg>
 							<svg className="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
 								 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
 									  d="M6 18L18 6M6 6l12 12"/>
 							</svg>
 						</button>
@@ -92,4 +176,12 @@ function Navbar() {
 
 }
 
-export { Navbar }
+function mapStateToProps(state) {
+	const { sign } = state
+	return {
+		sign
+	};
+}
+
+const connectedNavbar = connect(mapStateToProps)(Navbar);
+export { connectedNavbar as Navbar };

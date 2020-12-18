@@ -1,0 +1,20 @@
+.reviewRate{
+    width: 200px;
+    height: 30px;
+}
+
+.rating{
+    max-width: 75px;
+
+    .rating__background {
+        fill: #c0c0c0;
+        stroke-width: 1;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .rating__value {
+        fill: #ffc64b;
+        height: 100%;
+    }
+}

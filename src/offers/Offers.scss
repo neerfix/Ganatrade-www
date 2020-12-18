@@ -1,1 +1,32 @@
 
+
+.filter-buttons{
+
+    button{
+        min-width: 150px;
+        transition: all .1s;
+        border: 2px solid white;
+
+        &:hover{
+            border: 2px solid rgb(16, 185, 129);
+        }
+
+        .active{
+            border: 2px solid rgb(16, 185, 129);
+        }
+    }
+
+}
+
+.slideFilter{
+    transition: all .1s;
+
+    &:hover{
+        background: rgb(16, 185, 129);
+        color: white;
+    }
+}
+
+#listFilters{
+    transition: all .1s;
+}
