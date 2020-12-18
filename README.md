@@ -16,5 +16,5 @@ _Project by :
 ### Release
 Merge before your branch to develop and execute this command :
 ```
-make release
+make release (release-minor to minor version / release-major to major version)
 ```
