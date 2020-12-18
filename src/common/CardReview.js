@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import './CardReview.scss';
 
 import moment from "moment";
@@ -20,8 +20,8 @@ function CardReview({ review }) {
 					</div>
 					<div className="w-full bg-white rounded-b lg:rounded-b-none lg:rounded-r px-4 leading-normal">
 						<div className="w-full flex items-center justify-between">
-							<div className="text-black font-bold text-xl m-0">{review.author.username}</div>
-							<div className="text-black text-sm m-0">Le {moment.unix(review.created_at._seconds).format('Do MMMM YYYY')}</div>
+							<div className="text-black font-bold text-xl m-0">{review.author?.username}</div>
+							<div className="text-black text-sm m-0">Le {moment.unix(review.created_at?._seconds).format('Do MMMM YYYY')}</div>
 						</div>
 						<div id="stars" className="flex h-3.5 mb-3 px-1">
 							<i className={`

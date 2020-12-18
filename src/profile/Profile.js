@@ -61,14 +61,13 @@ function Profile(props) {
 
 		axios.get(`${apiConfig}users/${props.sign.user.id}/reviews`)
 			.then((response) => {
-				let reviews = response.data
-				reviews.map(review => {
+				setReviews(response.data.map(review => {
 					axios.get(`${apiConfig}users/${review.author_id}`)
 						.then((user) => {
 							review.author = user.data
 						})
-				})
-				setReviews(reviews)
+					return review
+				}))
 			})
 
 	}, [])
