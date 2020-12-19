@@ -11,15 +11,16 @@ import { useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 
 import Logo from '../assets/img/logo.png'
+import Search from './Search'
 
 function Navbar(props) {
 
 	let history = useHistory();
 
 	const logout = async () => {
+		history.push('/')
 		const { dispatch } = props
 		await dispatch(signActions.logout())
-		history.push('/')
 	}
 
 	return(
@@ -39,6 +40,7 @@ function Navbar(props) {
 							</Link>
 						</div>
 					</div>
+					<Search history={history}/>
 					<div className="hidden md:block">
 						<div className="flex items-center">
 							{/*<div className="ml-3 relative">
@@ -66,7 +68,7 @@ function Navbar(props) {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								{props.sign.user ?
+								{props.sign.loggedIn ?
 									<div className="relative flex items-center">
 										<div className="relative inline-block text-left">
 											<Menu>

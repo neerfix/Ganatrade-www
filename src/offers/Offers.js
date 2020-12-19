@@ -22,8 +22,28 @@ class Offers extends React.Component {
 		loading: true,
 		error: false,
 		offers: null,
+		isLoaded: false,
 		categories: null,
+		categoryFilters: null,
 		filters: ['test'],
+	}
+
+	async search(){
+		await fetch('https://beta.api.ganatrade.xyz/search' + this.props.location.search)
+			.then(response => response.json()
+				.then(json => {
+					console.log(json);
+					if(json.length > 0){
+						this.setState({offers: json, isLoaded: true})
+					}
+				})
+				.catch(e =>{
+					console.log(e)
+				})
+			)
+			.catch(e =>{
+				console.log(e)
+			})
 	}
 
 	async componentDidMount() {
@@ -106,8 +126,28 @@ class Offers extends React.Component {
 		}
 	}
 
-	toggleFilter(e){
-		console.log("click");
+	async setCategory(){
+		await fetch('https://beta.api.ganatrade.xyz/offers/categories/' + this.state.categoryFilters)
+			.then(response => response.json()
+				.then(json => {
+					console.log(json);
+					if(json.length > 0){
+						this.setState({offers: json, isLoaded: true})
+					}
+				})
+				.catch(e =>{
+					console.log(e)
+				})
+			)
+			.catch(e =>{
+				console.log(e)
+			})
+	}
+
+	toggleFilter = (e) => {
+		e.preventDefault()
+		this.setState({categoryFilters: e.target.id})
+		this.setCategory()
 	}
 
 	retryFetch = () => {
@@ -115,7 +155,17 @@ class Offers extends React.Component {
 		this.componentDidMount();
 	}
 
+	toggleFilterClear = (e) => {
+		e.preventDefault()
+		this.setState({categoryFilters: null})
+		this.retryFetch()
+	}
+
 	render(){
+		if(this.props.location.search.length && !this.state.isLoaded){
+			this.search();
+		}
+		
 		return(
 			<div id="offers" className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6">
 				<div className="w-4/5 mx-auto mb-5">
@@ -131,7 +181,7 @@ class Offers extends React.Component {
 							{/* Liste des filtres */}
 							<div id="listFilters" className="filter-buttons flex flex-nowrap justify-start py-2 my-3 mr-2 w-auto overflow-hidden">
 								<button onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground} 
-										onClick={this.toggleFilter} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
+										onClick={this.toggleFilterClear} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
 											<img className="m-auto" src={filterListStatic} data-hoverimg={filterList} alt="" />
 											<span>Tous les produits</span>
 								</button>
@@ -139,9 +189,9 @@ class Offers extends React.Component {
 								{this.state.categories ? ( 
 										this.state.categories.map((filter, f) => {
 											return (
-												<button key={f} filter={filter.img} onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground} onClick={this.toggleFilter} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
-													<img className="m-auto" src={'/assets/icons/' + filter.img + '.png'} data-hoverimg={'/assets/icons/' + filter.img + '.gif'} alt="" />
-													<span>{filter.title}</span>
+												<button id={filter.id} key={f} filter={filter.img} onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground} onClick={this.toggleFilter} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
+													<img id={filter.id} className="m-auto" src={'/assets/icons/' + filter.img + '.png'} data-hoverimg={'/assets/icons/' + filter.img + '.gif'} alt="" />
+													<span id={filter.id}>{filter.title}</span>
 												</button>
 											)
 										})

@@ -1,7 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { Redirect, Link } from 'react-router-dom';
 import './Offer.scss';
 
+import axios from "axios";
+import apiConfig from "../config/api.config"
 
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
@@ -27,6 +30,7 @@ class Offer extends React.Component {
 		user: null,
 		map_url : '',
 		trades: [],
+		newTrade: false,
 		offer: {
 			id: this.props.match.params.id,
 		},
@@ -34,11 +38,13 @@ class Offer extends React.Component {
 
 	async componentDidMount() {
 
+		console.log(this.props)
+
 		const offer_id = this.props.match.params.id;
 		this.setState({offer : { id: offer_id }});
 
 		// Récupération des infos offre
-		const offer_url = "https://beta.api.ganatrade.xyz/offers/" + this.state.offer.id;
+		const offer_url = apiConfig + "offers/" + this.state.offer.id;
 		async function fetchOffer(){
 			const offer_call = await fetch(offer_url);
 			const offer = await offer_call.json();
@@ -104,7 +110,13 @@ class Offer extends React.Component {
 									} else {
 										trade.user = user;
 									}
-									this.setState({trades : [...this.state.trades, trade]});
+									let listTrades = [...this.state.trades, trade]
+									listTrades.sort(function(a, b){
+										return b.date_of_trade?._seconds - a.date_of_trade?._seconds;
+									});
+									this.setState({
+										trades: listTrades
+									}, () => console.log(this.state.trades));
 								}).catch( error => {
 									console.log('Erreur dans la récupération de l\'utilisateur de l\'échange');
 									throw error;
@@ -132,6 +144,26 @@ class Offer extends React.Component {
 			return <Redirect to='/offers'/>;
 		}
 
+	}
+
+	responseTrade = (trade, response) => {
+		const idTrade = trade.id
+		const idOffer = this.state.offer.id
+		axios.post(`${apiConfig}offers/${idOffer}/trades/${idTrade}/${response}`)
+			.then((res) => {
+				let trades = this.state.trades.map(t => {
+					if(t.id === idTrade) {
+						t.status = response + "d"
+					}
+					return t
+				})
+				this.setState({
+					trades: trades
+				})
+			})
+			.catch(e => {
+				console.log(e)
+			})
 	}
 
 	render(){
@@ -249,67 +281,98 @@ class Offer extends React.Component {
 											Propositions d'échange
 										</span>
 									</h2>
-									{this.state.offer &&
+									{this.state.offer
+									&& this.state.offer.user_id !== this.props.user.id
+									&& this.state.trades.filter(t => { return t.status === 'accepted' }).length === 0 ?
 										<Link className="flex items-center p-2 bg-primary text-white rounded-md hover:bg-primary-dark"
-											to={ "/newoffer/" + this.state.offer.id }>
+											to={`/newtrade/${this.state.offer.id}`}>
 											Faire une proposition
 										</Link>
+									:
+										null
 									}
 								</div>
 
 								<div className="mt-5">
-									{ this.state.trades ?
-										(
-											<div>
-												{ this.state.trades.length > 0 ? (
-														this.state.trades.map( (trade, i) => {
-															return (
-																<div key={i} className="flex items-center bg-white p-3 mb-3">
-																	<div className="h-20 w-20 rounded-full ring-2 ring-white mr-3 overflow-hidden flex items-center">
-																		<img src={trade.user.avatar} alt="" />
+									{this.state.trades ?
+										<div>
+											{this.state.trades.length > 0 ?
+												this.state.trades.map((trade, i) =>
+													<div key={i} className="flex bg-white p-3 mb-3">
+														<div className="h-20 w-20 sm:rounded-lg flex-none bg-cover bg-center rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
+															<img src={trade.user.avatar} alt=""/>
+														</div>
+														<div className="w-full ml-3">
+															<div className="flex items-center justify-between mb-1">
+																<div className="text-black font-bold text-xl m-0">
+																	<span className="text-secondary">Posté par</span>
+																	<Link title="Consulter le profil"
+																		  className="ml-1"
+																		  to={"/profile/" + trade.user.id}>
+																		{trade.user.username}
+																	</Link>
+																</div>
+																<div className="text-black text-sm m-0">
+																	Le {moment.unix(trade.date_of_trade?._seconds).format('Do MMMM YYYY')}
+																</div>
+															</div>
+															<div className="text-black text-md mb-2">
+																Offre d'échange contre :
+																<span className="text-secondary roboto-bold ml-1">
+																	{trade.value}
+																	{trade.type === "purchase" ? " €" : null }
+																</span>
+															</div>
+															{trade.status === 'PENDING' ?
+																this.state.offer.user_id === this.props.user.id ?
+																	<div className="flex items-center w-full flex-row-reverse">
+																		<button className="flex items-center px-3 py-1 bg-red text-white rounded-md hover:bg-red-dark"
+																			onClick={() => this.responseTrade(trade, 'refuse')}>
+																			Refuser
+																		</button>
+																		<button className="flex items-center px-3 py-1 mr-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+																			onClick={() => this.responseTrade(trade, 'accepte')}>
+																			Accepter
+																		</button>
 																	</div>
-																	<div>
-																		<p>Posté par
-																			<Link title="Consulter le profil"
-																				className="ml-1"
-																				to={"/profile/" + trade.user.id} >
-																				{trade.user.username}
-																			</Link>
-																			{trade.date_of_trade &&
-																				<span className="ml-1">{moment.unix(trade.date_of_trade._seconds).fromNow()}</span>
-																			}
-																		</p>
+																: null
+															:
+																<div className="flex items-center w-full flex-row-reverse">
+																	<div className={
+																		`${trade.status === 'accepted' ? "bg-primary " : "bg-red "} flex items-center px-3 py-1 text-white rounded-md`
+																	}>
+																		{trade.status === 'accepted' ? "Offre accepté" : "Offre refusé"}
 																	</div>
 																</div>
-															)
-														})
-													) : (
-														// Aucun échange proposé
-														<div className="flex items-center justify-center overflow-hidden bg-white p-3 mb-3">
-															<i className="gg-smile-sad mr-3"></i>
-															Aucune proposition d'échange pour l'instant
+															}
 														</div>
-													)
-												}
+													</div>
+												)
+											:
+												<div className="flex items-center justify-center overflow-hidden bg-white p-3 mb-3">
+													<i className="gg-smile-sad mr-3"></i>
+													Aucune proposition d'échange pour l'instant
+												</div>
+											}
+										</div>
+									:
+										<div>
+											<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
+												<Skeleton circle={true}  height={70} width={70} className="mr-2" />
+												<Skeleton height={40} width={200}/>
 											</div>
-										): (
-											<div>
-												<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
-													<Skeleton circle={true}  height={70} width={70} className="mr-2" />
-													<Skeleton height={40} width={200}/>
-												</div>
-												<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
-													<Skeleton circle={true}  height={70} width={70} className="mr-2" />
-													<Skeleton height={40} width={200}/>
-												</div>
-												<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
-													<Skeleton circle={true}  height={70} width={70} className="mr-2" />
-													<Skeleton height={40} width={200}/>
-												</div>
+											<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
+												<Skeleton circle={true}  height={70} width={70} className="mr-2" />
+												<Skeleton height={40} width={200}/>
 											</div>
-										)
+											<div className="flex items-center overflow-hidden bg-white p-3 mb-3">
+												<Skeleton circle={true}  height={70} width={70} className="mr-2" />
+												<Skeleton height={40} width={200}/>
+											</div>
+										</div>
 									}
 								</div>
+
 							</div>
 
 						</div>
@@ -401,4 +464,13 @@ class Offer extends React.Component {
 
 }
 
-export { Offer }
+function mapStateToProps(state) {
+	const { sign } = state
+	const { user } = sign
+	return {
+		user
+	};
+}
+
+const connectedOffer = connect(mapStateToProps)(Offer);
+export { connectedOffer as Offer };

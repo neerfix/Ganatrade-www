@@ -7,7 +7,7 @@ import 'moment/locale/fr'
 class CardReview extends React.Component {
 
 	review = this.props.review;
-	
+
 	state = {
 		user: {},
 	}
@@ -20,7 +20,7 @@ class CardReview extends React.Component {
 			const user = await user_call.json();
 			return user;
 		}
-		
+
 		fetchUser(user_url).then( user => {
 			if(!user){
 				throw new Error(user);
@@ -39,8 +39,8 @@ class CardReview extends React.Component {
 			<div className="bg-white shadow overflow-hidden rounded-lg m-1 mr-4">
 				<div className="px-2 py-2">
 					<div className="w-full lg:flex items-center">
-						<div className="h-16 w-16 sm:rounded-lg flex-none bg-cover bg-center rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-							style={{ backgroundImage: "url('" + this.state.user.avatar +"')" }}>
+						<div className="h-16 w-16 sm:rounded-lg flex-none bg-cover bg-center rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden">
+							<img src={this.state.user.avatar} alt="" />
 						</div>
 						<div className="w-full bg-white rounded-b lg:rounded-b-none lg:rounded-r px-4 leading-normal">
 							<div className="w-full flex items-center justify-between">
