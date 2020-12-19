@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { Menu, Transition } from "@headlessui/react";
 
 import Logo from '../assets/img/logo.png'
+import Search from './Search'
 
 function Navbar(props) {
 
@@ -39,6 +40,7 @@ function Navbar(props) {
 							</Link>
 						</div>
 					</div>
+					<Search history={history}/>
 					<div className="hidden md:block">
 						<div className="flex items-center">
 							{/*<div className="ml-3 relative">
