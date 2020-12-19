@@ -1,3 +1,5 @@
+![SSH](https://github.com/Ganatrade/www/workflows/SSH/badge.svg?branch=master)
+![Deploy Beta](https://github.com/Ganatrade/www/workflows/Deploy%20Beta/badge.svg?branch=develop)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ganatrade/www)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ganatrade/www)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/ganatrade/www)
