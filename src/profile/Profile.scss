@@ -5,3 +5,11 @@
 .react-multiple-carousel__arrow:hover {
     background: #1d8795 !important;
 }
+
+#offers{
+    .react-multi-carousel-item{
+        width: 320px;
+        min-width: 320px;
+        max-width: 400px;
+    }
+}
