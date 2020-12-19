@@ -44,7 +44,7 @@ class CardReview extends React.Component {
 						</div>
 						<div className="w-full bg-white rounded-b lg:rounded-b-none lg:rounded-r px-4 leading-normal">
 							<div className="w-full flex items-center justify-between">
-								<div className="text-black font-bold text-xl m-0">{this.state.user?.username}</div>
+								<a className="text-black font-bold text-xl m-0" href={"/profile/" + this.state.user?.id }>{this.state.user?.username}</a>
 								<div className="text-black text-sm m-0">Le {moment.unix(this.review.created_at?._seconds).format('Do MMMM YYYY')}</div>
 							</div>
 							<div className="flex items-center reviewRate">

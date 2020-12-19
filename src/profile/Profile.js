@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 import './Profile.scss'
 
@@ -8,9 +8,8 @@ import { userActions } from '../redux/_actions/user.actions'
 
 import {OfferCard} from '../components/OfferCard'
 import {CardReview} from '../common/CardReview'
-import {Switch} from "@headlessui/react"
 
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 // Skeleton de chargement
 import Skeleton from 'react-loading-skeleton';
@@ -23,9 +22,6 @@ import "react-multi-carousel/lib/styles.css"
 import moment from 'moment'
 import 'moment/locale/fr'
 
-// Redirection
-import { useHistory } from "react-router-dom";
-
 // Profil de l'utilisateur
 import {OfferUser} from '../components/OfferUser';
 
@@ -35,6 +31,9 @@ class Profile extends React.Component {
 		loading: true,
 		error: false,
 		user: {
+			id: this.props.match.params.id,
+		},
+		editedUser:{
 			id: this.props.match.params.id,
 		},
 		trades: [],
@@ -69,20 +68,55 @@ class Profile extends React.Component {
 	}
 
 	inputChange(e) {
-		const { name, value } = e.target
-		this.setState({user : {
-			[name]: value
-		}})
+		const { name, value } = e.target;
+
+		if( value && this.state.user[name] !== value ){
+
+			if( name === "city" || name === "street" || name === "zipcode"){
+				this.setState({editedUser : {
+					...this.state.editedUser,
+					address : {
+						...this.state.editedUser.address, 
+						[name]: value
+					}
+			  	}})
+			} else {
+				this.setState({editedUser : {
+					...this.state.editedUser,
+					[name]: value
+			  	}})
+			}
+		}
 	}
 
 	saveModifications = async (e) => {
-		e.preventDefault()
+		e.preventDefault();
+		const { dispatch } = this.props;
+
+		if(!this.state.editedUser.address){
+			this.setState({editedUser : { address : { city : "", zipcode: "", street: "" } }});
+		}
+
+		await dispatch(userActions.update(this.state.editedUser));
+		document.location.reload();
 		
 	}
 
 	cancelModifications = (e) => {
 		e.preventDefault()
-		
+		document.getElementById("updateUser").reset();
+		console.log('click');
+
+		console.log(this.state.editedUser);
+
+		this.setState({editedUser : this.state.user})
+		/*
+		Object.keys(this.state.editedUser).map( (prop) => {
+			this.setState({editedUser : {
+				[prop]: undefined
+			}})
+		})
+		*/
 	}
 
 	async componentDidMount() {
@@ -90,8 +124,10 @@ class Profile extends React.Component {
 		const user_id = this.props.match.params.id;
 		this.setState({user : { id: user_id }});
 
+		const api_url = "https://beta.api.ganatrade.xyz/users/";
+
 		// Récupération des infos user
-		const user_url = "https://beta.api.ganatrade.xyz/users/" + this.state.user.id;
+		const user_url = api_url + this.state.user.id;
 		async function fetchUser(){
 			const user_call = await fetch(user_url);
 			const user = await user_call.json();
@@ -99,7 +135,7 @@ class Profile extends React.Component {
 		}
 
 		// Récupération des infos trades
-		const offers_url = "https://beta.api.ganatrade.xyz/users/" + this.state.user.id + '/offers/';
+		const offers_url = api_url + this.state.user.id + '/offers/';
 		async function fetchOffers(trades_url){
 			const trades_call = await fetch(trades_url);
 			const trades = await trades_call.json();
@@ -107,7 +143,7 @@ class Profile extends React.Component {
 		}
 
 		// Récupération des avis utilisateur
-		const reviews_url = "https://beta.api.ganatrade.xyz/users/" + this.state.user.id + '/reviews/';
+		const reviews_url = api_url + this.state.user.id + '/reviews/';
 		async function fetchReviews(reviews_url){
 			const reviews_call = await fetch(reviews_url);
 			const reviews = await reviews_call.json();
@@ -115,16 +151,15 @@ class Profile extends React.Component {
 		}
 
 		if(user_id){
-			console.log(user_id);
 
 			fetchUser(user_url).then( user => {
 				if(!user){
 					throw new Error(user);
 				} else {
 					this.setState({user: user, loading: false});
+					this.setState({editedUser: user, loading: false});
 
 					fetchOffers(offers_url).then( offers => {
-						console.log(offers);
 						if(!offers){
 							throw new Error(offers);
 						} else {
@@ -137,7 +172,6 @@ class Profile extends React.Component {
 					});
 
 					fetchReviews(reviews_url).then( reviews => {
-						console.log(reviews);
 						if(!reviews){
 							throw new Error(reviews);
 						} else {
@@ -181,7 +215,7 @@ class Profile extends React.Component {
 							}
 
 							{ (this.state.user.id === this.props.sign.user.id) &&
-								<form>
+								<form id="updateUser">
 									<div className="px-4 py-5">
 										<div className="mb-4">
 											<label htmlFor="username"
@@ -193,9 +227,9 @@ class Profile extends React.Component {
 														<i className="gg-user" />
 													</span>
 												</div>
-												<input type="text" id="username" name="username" required value={this.state.user.username}
+												<input type="text" id="username" name="username" required defaultValue={this.state.editedUser.username || this.state.user.username}
 													className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
-													placeholder="Pseudo" onChange={(e) => this.inputChange(e)} />
+													placeholder="Pseudo" onChange={(e) => this.inputChange(e)} onBlur={(e) => this.inputChange(e)} />
 											</div>
 										</div>
 										<div className="mb-4">
@@ -209,12 +243,12 @@ class Profile extends React.Component {
 														<i className="gg-mail" />
 													</span>
 												</div>
-												<input type="email" id="email" name="email" required value={this.state.user.email}
+												<input type="email" id="email" name="email" required defaultValue={this.state.editedUser.email || this.state.user.email}
 													className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													placeholder="Email" onChange={(e) => this.inputChange(e)} />
 											</div>
 										</div>
-										<div className="mb-4">
+										{/* <div className="mb-4">
 											<label htmlFor="password"
 												className="block text-sm font-medium text-gray-700">Mot de passe</label>
 											<div className="mt-1 relative rounded-md shadow-sm">
@@ -229,7 +263,7 @@ class Profile extends React.Component {
 													className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													placeholder="**********" onChange={(e) => this.inputChange(e)} />
 											</div>
-										</div>
+										</div> */}
 										<div className="">
 												<label htmlFor="avatar"
 													className="block text-sm font-medium text-gray-700">Avatar</label>
@@ -240,7 +274,7 @@ class Profile extends React.Component {
 															<i className="gg-image" />
 														</span>
 													</div>
-													<input type="text" id="avatar" name="avatar" required value={this.state.user.avatar}
+													<input type="text" id="avatar" name="avatar" required defaultValue={this.state.editedUser.avatar || this.state.user.avatar}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="Avatar (url)" onChange={(e) => this.inputChange(e)} />
 												</div>
@@ -261,7 +295,7 @@ class Profile extends React.Component {
 															<i className="gg-user" />
 														</span>
 													</div>
-													<input type="text" id="firstname" name="firstname" required value={this.state.user.firstname}
+													<input type="text" id="firstname" name="firstname" required defaultValue={this.state.editedUser.firstname || this.state.user.firstname}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="Prénom" onChange={(e) => this.inputChange(e)} />
 												</div>
@@ -276,12 +310,13 @@ class Profile extends React.Component {
 															<i className="gg-user" />
 														</span>
 													</div>
-													<input type="text" id="lastname" name="lastname" required value={this.state.user.lastname}
+													<input type="text" id="lastname" name="lastname" required defaultValue={this.state.editedUser.lastname || this.state.user.lastname}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="Nom de famille" onChange={(e) => this.inputChange(e)} />
 												</div>
 											</div>
 										</div>
+										{/*
 										<div className="grid grid-cols-2 gap-4 mb-4">
 											<div className="">
 												<label htmlFor="phone"
@@ -293,7 +328,7 @@ class Profile extends React.Component {
 															<i className="gg-smartphone" />
 														</span>
 													</div>
-													<input type="text" id="phone" name="phone" value={this.state.user.phone}
+													<input type="text" id="phone" name="phone" defaultValue={this.state.editedUser.phone || this.state.user.phone}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="0612345678" onChange={(e) => this.inputChange(e)} />
 												</div>
@@ -310,7 +345,7 @@ class Profile extends React.Component {
 														<i className="gg-globe-alt" />
 													</span>
 												</div>
-												<input type="text" id="street" name="street" value={this.state.user.street}
+												<input type="text" id="street" name="street" defaultValue={this.state.editedUser.street || this.state.user.street}
 													className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 													placeholder="1 Rue de la République" onChange={(e) => this.inputChange(e)} />
 											</div>
@@ -327,7 +362,7 @@ class Profile extends React.Component {
 															<i className="gg-globe-alt" />
 														</span>
 													</div>
-													<input type="text" id="city" name="city" value={this.state.user.city}
+													<input type="text" id="city" name="city" defaultValue={this.state.editedUser.city || this.state.user.city}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="Paris" onChange={(e) => this.inputChange(e)} />
 												</div>
@@ -342,12 +377,13 @@ class Profile extends React.Component {
 															<i className="gg-globe-alt" />
 														</span>
 													</div>
-													<input type="text" id="zipCode" name="zipCode" value={this.state.user.zipcode}
+													<input type="text" id="zipCode" name="zipCode" defaultValue={this.state.editedUser.zipcode || this.state.user.zipcode}
 														className="focus:ring-secondary focus:border-secondary block w-full pl-12 pr-7 sm:text-sm border-gray-light rounded-md"
 														placeholder="95000" onChange={(e) => this.inputChange(e)} />
 												</div>
 											</div>
 										</div>
+										*/}
 									</div>
 								
 									<div className="grid grid-cols-6 gap-4 px-4 pb-3 mb-2">
@@ -376,9 +412,11 @@ class Profile extends React.Component {
 
 						</div>
 
+						{/* Colonne de droite */}
 						<div id="userProfile" className="col-span-2 rounded mt-5 p-5">
 
 							{/* Evaluations utilisateur */}
+
 							<div id="reviews" className="mb-7">
 								<div className="text-3xl font-bold leading-7 mb-3">
 									Évaluations
@@ -392,7 +430,7 @@ class Profile extends React.Component {
 												autoPlaySpeed={3000}
 												centerMode={false}
 												className="ml-0"
-												containerClass="container"
+												containerClass=""
 												dotListClass=""
 												draggable
 												focusOnSelect={false}
@@ -429,6 +467,7 @@ class Profile extends React.Component {
 								
 							</div>
 
+							{/* Offres */}
 							{ ( this.state.user.id === this.props.sign.user.id ) &&
 									<div id="offers" className="mb-7">
 									<div className="text-3xl font-bold leading-7 mb-3">
@@ -482,17 +521,15 @@ class Profile extends React.Component {
 								</div>
 							}
 
-							{/* Offres utilisateur */}
-
-
 						</div>
 					</div>
 
-					{ ( this.state.user.id != this.props.sign.user.id ) &&
-							<div id="offers" className="mt-5 mb-7">
-								<div className="text-3xl font-bold leading-7 mb-3">
-									Offres publiées par {this.state.user.username}
-								</div>
+					{/* Liste des offres si le profil != user connecté */}
+					{ ( this.state.user.id !== this.props.sign.user.id ) &&
+						<div id="offers" className="mt-5 mb-7">
+							<div className="text-3xl font-bold leading-7 mb-3">
+								Offres publiées par {this.state.user.username}
+							</div>
 								{
 									this.state.offers && this.state.offers.length ?
 									(
@@ -539,7 +576,7 @@ class Profile extends React.Component {
 									
 								}
 							</div>
-						}
+					}
 
 				</main>
 			</div>
@@ -558,14 +595,3 @@ function mapStateToProps(state) {
 const connectedProfilePage = connect(mapStateToProps)(Profile);
 
 export { connectedProfilePage as Profile }
-
-/*
-function Profile(props) {
-
-	const [user, setUser] = useState(props.sign.user)
-	const [reviews, setReviews] = useState([])
-	const [switchNotifs, setSwitchNotifs] = useState(false);
-	const [switchInfos, setSwitchInfos] = useState(false);
-
-}
-*/

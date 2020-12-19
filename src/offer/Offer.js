@@ -15,8 +15,6 @@ import { ImageGroup, Image } from 'react-fullscreen-image'
 
 // Placeholder
 import placeholder from '../assets/img/placeholder.png';
-import placeholder1 from '../assets/img/placeholder1.png';
-import placeholder2 from '../assets/img/placeholder2.png';
 
 // Profil de l'utilisateur
 import {OfferUser} from '../components/OfferUser';
@@ -69,8 +67,7 @@ class Offer extends React.Component {
 				} else {
 
 					if(!offer.pictures.length){
-						offer.pictures.push(placeholder1);
-						offer.pictures.push(placeholder2);
+						offer.pictures.push(placeholder);
 					}
 
 					this.setState({offer: offer, loading: false});
@@ -207,8 +204,6 @@ class Offer extends React.Component {
 														<p>{ this.state.offer.description }</p>
 													</div>
 												</div>
-
-												<hr></hr>
 
 												<div className="flex justify-between items-center mt-5">
 													{/* Tags */}
