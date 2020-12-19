@@ -14,6 +14,7 @@ import { Sign } from './sign/Sign'
 import { Offer } from './offer/Offer'
 import { Offers } from './offers/Offers'
 import { NewOffer } from './newoffer/NewOffer'
+import { NewTrade } from "./newtrade/NewTrade";
 import { Guide } from './guide/Guide'
 import { Profile } from './profile/Profile'
 
@@ -33,7 +34,8 @@ function App() {
 					<Route exact path="/sign" component={withRouter(Sign)} />
 					<Route exact path="/password/forgot" />
 					<Route exact path="/guide" component={withRouter(Guide)}/>
-					<PrivateRoute exact path="/newoffer/:id?" component={withRouter(NewOffer)}/>
+					<PrivateRoute exact path="/newoffer" component={withRouter(NewOffer)}/>
+					<PrivateRoute exact path="/newtrade/:id" component={withRouter(NewTrade)}/>
 					<PrivateRoute exact path="/profile/:id" component={withRouter(Profile)} />
 				</Switch>
 			</Router>
