@@ -68,7 +68,7 @@ function Navbar(props) {
 								</div>
 							</div>*/}
 							<div className="relative flex items-center">
-								{props.sign.user ?
+								{props.sign.loggedIn ?
 									<div className="relative flex items-center">
 										<div className="relative inline-block text-left">
 											<Menu>
