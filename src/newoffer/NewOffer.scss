@@ -1,0 +1,51 @@
+#new-offer {
+
+    #offerInfo {
+        position: relative;
+
+        #offerTitle {
+            position: absolute;
+            top: -1.25rem;
+        }
+    }
+
+    .dzu-dropzone {
+
+        border-radius: 0.5rem;
+        --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        border-color: #f5f6f9;
+
+        .dzu-previewContainer {
+            padding: 1rem 3%;
+        }
+
+        .dzu-inputLabel {
+            color: #49B794;
+        }
+
+        .dzu-submitButtonContainer {
+            margin: 0;
+
+            .dzu-submitButton {
+                margin: 0;
+                margin-bottom: 1rem;
+                background: #219AAA;
+                color: #ffffff;
+            }
+        }
+
+        .dzu-inputLabelWithFiles {
+            margin: 1rem 3%;
+            background: #219AAA;
+            color: #ffffff;
+        }
+
+        .dzu-inputLabelWithFiles:hover {
+            background: #1d8795;
+        }
+
+    }
+
+
+}
