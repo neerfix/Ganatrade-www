@@ -9,6 +9,7 @@ const update = ({ id, username, avatar, firstname, lastname, email, phone, addre
 		.then(response => response.json())
 		.then(user => {
 			if(user) {
+				user.id = id;
 				dispatch(success(user))
 			}
 		})

@@ -98,14 +98,13 @@ class Profile extends React.Component {
 		}
 
 		await dispatch(userActions.update(this.state.editedUser));
-		document.location.reload();
+		// document.location.reload();
 		
 	}
 
 	cancelModifications = (e) => {
 		e.preventDefault()
 		document.getElementById("updateUser").reset();
-		console.log('click');
 
 		console.log(this.state.editedUser);
 
