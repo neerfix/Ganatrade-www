@@ -58,10 +58,14 @@ function NewOffer(props) {
 	}
 
 	// specify upload params and url for your files
-	const getUploadParams = ({ meta }) => { return { url: 'https://httpbin.org/post' } }
+	const getUploadParams = ({ meta }) => {
+		return { url: 'https://httpbin.org/post' }
+	}
 
 	// called every time a file's `status` changes
-	const handleChangeStatus = ({ meta, file }, status) => { console.log(status, meta, file) }
+	const handleChangeStatus = ({ meta, file }, status) => {
+		// console.log(status, meta, file)
+	}
 
 	// receives array of files that are done uploading when submit button is clicked
 	const handleSubmit = (files, allFiles) => {
@@ -70,7 +74,7 @@ function NewOffer(props) {
 
 	const submitPictures = () => {
 		let picturesLink = []
-		let idFolder = Math.floor(Math.random() * 100)
+		let idFolder = Math.random().toString(36).substr(2, 8)
 		pictures.forEach(( { file }) => {
 			let metadata = { contentType: file.type }
 			const uploadTask = storageRef.child(idFolder + '/' + file.name).put(file, metadata);
@@ -78,14 +82,14 @@ function NewOffer(props) {
 			uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 				function(snapshot) {
 					// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-					var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-					console.log('Upload is ' + progress + '% done');
+					let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+					// console.log('Upload is ' + progress + '% done');
 					switch (snapshot.state) {
 						case firebase.storage.TaskState.PAUSED: // or 'paused'
-							console.log('Upload is paused');
+							 // console.log('Upload is paused');
 							break;
 						case firebase.storage.TaskState.RUNNING: // or 'running'
-							console.log('Upload is running');
+							// console.log('Upload is running');
 							break;
 					}
 				}, function(error) {
@@ -95,22 +99,22 @@ function NewOffer(props) {
 					switch (error.code) {
 						case 'storage/unauthorized':
 							// User doesn't have permission to access the object
-							console.log('storage/unauthorized')
+							// console.log('storage/unauthorized')
 							break;
 						case 'storage/canceled':
 							// User canceled the upload
-							console.log('storage/canceled')
+							// console.log('storage/canceled')
 							break;
 						case 'storage/unknown':
 							// Unknown error occurred, inspect error.serverResponse
-							console.log('storage/unknown')
+							// console.log('storage/unknown')
 							break;
 					}
 				}, function() {
 					// Upload completed successfully, now we can get the download URL
 					uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
 						picturesLink.push(downloadURL)
-						console.log('File available at', downloadURL);
+						// console.log('File available at', downloadURL);
 					});
 				});
 		})
@@ -119,8 +123,12 @@ function NewOffer(props) {
 
 	const uploadPictures = async (e) => {
 		e.preventDefault()
-		let pictures = await submitPictures()
-		addOffer(pictures)
+		let picturesLink = await submitPictures()
+		setTimeout(() => {
+			if(picturesLink.length === pictures.length) {
+				addOffer(picturesLink)
+			}
+		}, 5000)
 	}
 
 	const addOffer = (pictures) => {
@@ -153,7 +161,6 @@ function NewOffer(props) {
 		console.log(newOffer)
 		axios.post(`${configApi}offers`, newOffer)
 			.then((response) => {
-				console.log(response)
 				history.push('/offers/' + response.data.id)
 			})
 	}
@@ -168,7 +175,7 @@ function NewOffer(props) {
 							Nouvelle offre
 						</span>
 					</h1>
-					<form className="p-6" onSubmit={(e) => addOffer(e)}>
+					<div className="px-6 pt-6">
 						<Dropzone
 							getUploadParams={getUploadParams}
 							onChangeStatus={handleChangeStatus}
@@ -179,6 +186,8 @@ function NewOffer(props) {
 							submitButtonContent={"Sauvegarder"}
 							maxFiles={5}
 						/>
+					</div>
+					<form className="px-6 pb-6" onSubmit={(e) => addOffer(e)}>
 						<div className="mt-4">
 							<label htmlFor="title"
 								   className="block text-sm font-medium text-gray-700">Titre de l'offre</label>
