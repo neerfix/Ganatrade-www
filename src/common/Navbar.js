@@ -18,9 +18,9 @@ function Navbar(props) {
 	let history = useHistory();
 
 	const logout = async () => {
+		history.push('/')
 		const { dispatch } = props
 		await dispatch(signActions.logout())
-		history.push('/')
 	}
 
 	return(
