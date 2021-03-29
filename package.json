@@ -75,6 +75,7 @@
     "@testing-library/dom": "^7.30.1",
     "@testing-library/react-hooks": "^5.1.0",
     "autoprefixer": "^9.8.6",
+    "http-parser-js": "^0.5.3",
     "postcss-cli": "^8.3.0",
     "react-test-renderer": "^17.0.2",
     "tailwindcss": "^2.0.1"
