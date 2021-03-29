@@ -25,7 +25,7 @@ class Offers extends React.Component {
 		isLoaded: false,
 		categories: null,
 		categoryFilters: null,
-		filters: ['test'],
+		filters: [],
 	}
 
 	async search(){
@@ -48,38 +48,75 @@ class Offers extends React.Component {
 
 	async componentDidMount() {
 
+		const categories = [
+			{ id: 2, img: 'filterArt', title: 'Art' },
+			{ id: 3, img: 'filterBike', title: 'Bike' },
+			{ id: 4, img: 'filterBooks', title: 'Books' },
+			{ id: 7, img: 'filterHome', title: 'Home' },
+			{ id: 8, img: 'filterPets', title: 'Pets' },
+			{ id: 9, img: 'filterPuzzle', title: 'Puzzle' },
+		]
+
+		const offers = [
+			{
+				id: 1, pictures: [], title: 'Pantalon à trou jaune',
+				description: 'Magnifique pantalon jaune de taille 42',
+				trade: { target: 'Chaussure Bleu' }, tags: ['home'],
+				is_active: true
+			},
+			{
+				id: 2, pictures: [], title: 'Tournevis multi-fonctions',
+				description: 'Votre meilleur ami pour vos séances de bricolage',
+				trade: { target: 'Scie à métaux' }, tags: ['home'],
+				is_active: true
+			},
+			{
+				id: 3, pictures: [], title: 'Bateau à moteur V8',
+				description: 'Une bête de competition',
+				trade: { target: 'Kayak' }, tags: ['bike'],
+				is_active: true
+			},
+		]
+
+		this.setState({
+			categories: categories,
+			offers: offers,
+			loading: false,
+			error: false,
+		})
+
 		// Récupération des offres
-		async function fetchOffers(){
+		/*async function fetchOffers(){
 			const offers_url = "https://beta.api.ganatrade.xyz/offers";
 			const offers_call = await fetch(offers_url);
 			const offers = await offers_call.json();
 			return offers;
-		}
+		}*/
 
-		fetchOffers().then( offers => {
+		/*fetchOffers().then( offers => {
 			if(!offers){
 				throw new Error(offers);
-			} else {	
+			} else {
 				this.setState({offers: offers, loading: false});
 			}
 		}).catch( error => {
 			console.log('Erreur dans la récupération des offres');
 			this.setState({error: true, loading: false});
 			throw error;
-		});
+		});*/
 
 		// Récupération des categories
 		const categories_url = "https://beta.api.ganatrade.xyz/categories";
 		const categories_call = await fetch(categories_url);
 
-		try {
+		/*try {
 			const categories = await categories_call.json();
 			this.setState({categories: categories, loading: false});
 		} catch ( e ) {
 			this.setState({error: true, loading: false});
 			console.log(categories_call);
 			console.log(e);
-		}
+		}*/
 
 	}
 
@@ -94,17 +131,17 @@ class Offers extends React.Component {
 		if( buttonImg ) {
 			let staticImg;
 			let hoverimg;
-			
+
 			if( e.type === "mouseenter" ){
 				staticImg = buttonImg.src;
 				hoverimg = buttonImg.dataset.hoverimg;
-			
+
 				buttonImg.src = hoverimg;
 				buttonImg.dataset.hoverimg = staticImg;
 			} else if ( e.type === "mouseleave" ) {
 				staticImg = buttonImg.dataset.hoverimg;
 				hoverimg = buttonImg.src;
-			
+
 				buttonImg.src = staticImg;
 				buttonImg.dataset.hoverimg = hoverimg;
 			}
@@ -165,7 +202,7 @@ class Offers extends React.Component {
 		if(this.props.location.search.length && !this.state.isLoaded){
 			this.search();
 		}
-		
+
 		return(
 			<div id="offers" className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6">
 				<div className="w-4/5 mx-auto mb-5">
@@ -180,13 +217,13 @@ class Offers extends React.Component {
 							</button>
 							{/* Liste des filtres */}
 							<div id="listFilters" className="filter-buttons flex flex-nowrap justify-start py-2 my-3 mr-2 w-auto overflow-hidden">
-								<button onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground} 
+								<button onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground}
 										onClick={this.toggleFilterClear} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
 											<img className="m-auto" src={filterListStatic} data-hoverimg={filterList} alt="" />
 											<span>Tous les produits</span>
 								</button>
 
-								{this.state.categories ? ( 
+								{this.state.categories ? (
 										this.state.categories.map((filter, f) => {
 											return (
 												<button id={filter.id} key={f} filter={filter.img} onMouseEnter={this.changeBackground} onMouseLeave={this.changeBackground} onClick={this.toggleFilter} className="shadow rounded-lg bg-white mx-2 w-1/4 px-3 py-5">
@@ -195,7 +232,7 @@ class Offers extends React.Component {
 												</button>
 											)
 										})
-									) : ( 
+									) : (
 										<Skeleton width="150" height="150" />
 									)
 								}
@@ -213,13 +250,13 @@ class Offers extends React.Component {
 					<div id="selectedFilters" className="flex items-center">
 						<p>Filtres appliqués: </p>
 						{this.state.filters.map((filter, j) => {
-							return ( 
+							return (
 								<div key={j} className="filterItem flex m-1 ml-4 uppercase border-2 border-green-500 px-2 py-1 bg-green-200 uppercase text-green-700 rounded-full">
 									<span className="mr-2">{filter}</span>
 									<button onClick={this.toggleFilter} filter="">
 										<i className="gg-close"></i>
 									</button>
-								</div> 
+								</div>
 							)
 						})}
 					</div>
@@ -228,12 +265,12 @@ class Offers extends React.Component {
 				<div>
 					{ (this.state.loading && !this.state.error) ? (
 						<img className="m-auto" src={loading} alt="Chargement des offres en cours"/>
-					) : ( 
+					) : (
 						(this.state.offers) ? (
 							<main className="flex flex-wrap">
 								{this.state.offers.map((offer, i) => {
 									if(offer.is_active) {
-										return (<OfferCard key={offer.id} offer={offer} />) 
+										return (<OfferCard key={offer.id} offer={offer} />)
 									}
 									return false;
 								})}

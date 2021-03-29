@@ -13,13 +13,13 @@ class OfferCard extends React.Component {
 
 	state = {
 		loading: true,
-		user: '',
+		user: {},
 	}
 
     async componentDidMount() {
 
 		// Récupération du profil utilisateur
-		const user_url = "https://beta.api.ganatrade.xyz/users/" + this.props.offer.user_id;
+		/*const user_url = "https://beta.api.ganatrade.xyz/users/" + this.props.offer.user_id;
 		const user_call = await fetch(user_url);
 
 		try {
@@ -29,7 +29,7 @@ class OfferCard extends React.Component {
 			this.setState({user: false, loading: false});
 			console.log(user_call);
 			console.log(e);
-		}
+		}*/
 
 	}
 
@@ -53,7 +53,7 @@ class OfferCard extends React.Component {
                     {/* Titre et description */}
                     <Link className="offerBasics flex-column flex-1" title="Consulter l'offre" to={"/offers/" + this.props.offer.id}>
                         <h2 className="offerTitle roboto-bold text-xl mb-2 mt-3 text-primary">
-                            {this.props.offer.title || <Skeleton height={20}/>}
+                            {(this.props.offer.title || this.props.offer.id) || <Skeleton height={20}/>}
                         </h2>
                         <p className="offerDesc text-gray-600 text-base flex-1">
                             {this.props.offer.description || <Skeleton count={2} />}

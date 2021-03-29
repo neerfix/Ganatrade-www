@@ -36,7 +36,7 @@ function App() {
 					<Route exact path="/guide" component={withRouter(Guide)}/>
 					<PrivateRoute exact path="/newoffer" component={withRouter(NewOffer)}/>
 					<PrivateRoute exact path="/newtrade/:id" component={withRouter(NewTrade)}/>
-					<PrivateRoute exact path="/profile/:id" component={withRouter(Profile)} />
+					<Route exact path="/profile/:id" component={withRouter(Profile)} />
 				</Switch>
 			</Router>
 		</div>
